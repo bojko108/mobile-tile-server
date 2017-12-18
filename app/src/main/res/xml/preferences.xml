@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_title">
+    <EditTextPreference
+        android:defaultValue="@string/settings_server_port_default"
+        android:key="@string/serverport"
+        android:title="@string/settings_server_port"
+        android:summary="@string/settings_server_port_details"
+        android:numeric="integer"
+        android:maxLength="4"/>
+    <EditTextPreference
+        android:defaultValue="@string/settings_root_path_default"
+        android:key="@string/rootpath"
+        android:title="@string/settings_root_path"
+        android:summary="@string/settings_root_path_details" />
+    <SwitchPreference
+        android:key="@string/running"
+        android:title="@string/settings_status"
+        android:defaultValue="false"
+        android:enabled="false"
+        android:selectable="false" />
+    <PreferenceCategory
+        android:title="@string/settings_reset_category"
+        android:key="@string/pref_key_storage_settings"
+        android:selectable="false" >
+        <Preference
+            android:key="@string/settings_reset_button"
+            android:selectable="true"
+            android:title="@string/settings_reset" />
+    </PreferenceCategory>
+</PreferenceScreen>

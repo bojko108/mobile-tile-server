@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Offline Tile Server</string>
+    <string name="dialog_ok">ОК</string>
+    <string name="dialog_cancel">Отказ</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Не</string>
+    <string name="restore_defaults">Наистина ли искате ли да възстановите настройките по подразбиране?</string>
+    <string name="app_notification">"Стартиран на port: "</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_server_port">Сървър port</string>
+    <string name="settings_server_port_details">Задайте port, на който да работи сървъра</string>
+    <string name="settings_root_path">Директория, съдържаща тайлове</string>
+    <string name="settings_root_path_details">Задайте директорията, в която се съхраняват тайлове</string>
+    <string name="settings_status">Сървърът е стартиран</string>
+    <string name="settings_reset">Възстанови</string>
+    <string name="button_text_start">Стартиране</string>
+    <string name="button_text_stop">Спиране</string>
+    <string name="button_text_settings">Настройки</string>
+    <string name="settings_reset_category">Възстановяване на началните настройки</string>
+</resources>

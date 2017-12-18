@@ -1,0 +1,33 @@
+<resources>
+    <!-- Strings related to UI -->
+    <string name="app_name">Offline Tile Server</string>
+    <string name="app_notification">Running on port: </string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="button_text_start">Start</string>
+    <string name="button_text_stop">Stop</string>
+    <string name="button_text_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="restore_defaults">Do you want to reset all settings to default values?</string>
+    <string name="settings_server_port">Server port</string>
+    <string name="settings_server_port_details">Specify port for running the tile server</string>
+    <string name="settings_server_port_default" translatable="false">1886</string>
+    <string name="settings_root_path">Tiles root directory path</string>
+    <string name="settings_root_path_details">Specify root directory path where the map tiles are stored</string>
+    <string name="settings_root_path_default" translatable="false">/storage/9016-4EF8/OfflineTiles</string>
+    <string name="settings_status">Tile server running</string>
+    <string name="settings_reset_category">Restore default settings</string>
+    <string name="settings_reset">Restore</string>
+    <string name="settings_reset_button" translatable="false">settings_reset_button</string>
+    <string name="pref_key_storage_settings" translatable="false">pref_key_storage_settings</string>
+    <string name="serverport" translatable="false">serverport</string>
+    <string name="rootpath" translatable="false">rootpath</string>
+    <string name="running" translatable="false">running</string>
+    <string name="explorer_activity_name">File Explorer</string>
+    <string name="filexplorer_choose_button">Choose</string>
+    <string name="fileexplorer_nodata">No Data</string>
+</resources>
