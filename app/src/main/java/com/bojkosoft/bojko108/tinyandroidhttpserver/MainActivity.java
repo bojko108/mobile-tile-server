@@ -122,7 +122,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             buttonStart.setEnabled(true);
             buttonStop.setEnabled(false);
         }
-
     }
 
     private byte[] getNoTileFile() {
