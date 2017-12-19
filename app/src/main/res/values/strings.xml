@@ -28,6 +28,4 @@
     <string name="rootpath" translatable="false">rootpath</string>
     <string name="running" translatable="false">running</string>
     <string name="explorer_activity_name">File Explorer</string>
-    <string name="filexplorer_choose_button">Choose</string>
-    <string name="fileexplorer_nodata">No Data</string>
 </resources>
