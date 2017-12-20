@@ -11,7 +11,14 @@ import server.response.Response;
 import server.response.Status;
 
 public class MyServer extends NanoHTTPD {
+    /**
+     * this.mRoothPath - the main directory served by the server. All directories and
+     * files are made accessible.
+     */
     private String mRootPath;
+    /**
+     * this.mNoTile - when no data this tile is returned
+     */
     private byte[] mNoTile;
 
     public MyServer(int port, String rootPath, byte[] noTile) throws IOException {
@@ -21,16 +28,20 @@ public class MyServer extends NanoHTTPD {
         this.start();
     }
 
+    /**
+     * Main HTTP request handler. This method handles the requests for tiles and returns
+     * them (if not tile is found in root directory - "no tile" image is returned.
+     *
+     * @param session the incoming session
+     * @return image
+     */
     @Override
     public Response handle(IHTTPSession session) {
         InputStream stream = null;
         try {
             File file = new File(this.mRootPath + session.getUri());
-            if (!file.exists() || (file.exists() && file.isDirectory())) {
-                stream = new ByteArrayInputStream(this.mNoTile);
-            } else {
-                stream = new FileInputStream(file);
-            }
+            // if tile not found - return no tile
+            stream = ((!file.exists() || (file.exists() && file.isDirectory())) ? new ByteArrayInputStream(this.mNoTile) : new FileInputStream(file));
             return Response.newChunkedResponse(Status.OK, "image/png", stream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

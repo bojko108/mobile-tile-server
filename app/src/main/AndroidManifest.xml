@@ -21,13 +21,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MySettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/settings_title" />
         <activity
             android:name=".ExplorerActivity"
             android:label="@string/explorer_activity_name" />
 
-        <service android:name=".MyTileServer" />
+        <service android:name=".TileServer" />
     </application>
 
 </manifest>

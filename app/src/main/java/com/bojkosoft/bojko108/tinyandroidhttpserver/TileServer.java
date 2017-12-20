@@ -7,13 +7,19 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.bojkosoft.bojko108.tinyandroidhttpserver.MainActivity;
+import com.bojkosoft.bojko108.tinyandroidhttpserver.R;
+
 import java.io.IOException;
 
 import server.MyServer;
 
-public class MyTileServer extends Service {
+public class TileServer extends Service {
+    // tile server port
     public static int PORT;
+    // tile server root directory path
     public static String ROOT_PATH;
+    // no tile data
     public static byte[] NO_TILE;
 
     private MyServer server;

@@ -21,6 +21,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // server port and root path: stored in shared preferences
     private int serverPort;
     private String rootPath;
+    // internal use - true when tile server is up and running
     private boolean running;
 
     // Storage Permissions
@@ -62,10 +63,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonStart:
 
                 // START the service
-                MyTileServer.PORT = this.serverPort;
-                MyTileServer.ROOT_PATH = this.rootPath;
-                MyTileServer.NO_TILE = this.getNoTileFile();
-                Intent serviceToStart = new Intent(this, MyTileServer.class);
+                TileServer.PORT = this.serverPort;
+                TileServer.ROOT_PATH = this.rootPath;
+                TileServer.NO_TILE = this.getNoTileFile();
+                Intent serviceToStart = new Intent(this, TileServer.class);
                 startService(serviceToStart);
 
                 this.running = true;
@@ -78,7 +79,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonStop:
 
                 // STOP the service
-                Intent serviceToStop = new Intent(this, MyTileServer.class);
+                Intent serviceToStop = new Intent(this, TileServer.class);
                 stopService(serviceToStop);
 
                 this.running = false;
@@ -91,7 +92,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonSettings:
 
                 // OPEN settings dialog
-                Intent preferencesIntent = new Intent(this, MySettingsActivity.class);
+                Intent preferencesIntent = new Intent(this, SettingsActivity.class);
                 startActivity(preferencesIntent);
 
                 break;
@@ -124,6 +125,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * Get no data tile as byte[]
+     *
+     * @return byte[]
+     */
     private byte[] getNoTileFile() {
         InputStream stream = getResources().openRawResource(R.raw.no_tile);
 
