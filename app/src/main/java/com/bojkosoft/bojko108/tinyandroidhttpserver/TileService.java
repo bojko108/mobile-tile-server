@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import server.MyServer;
 
-public class TileServer extends Service {
+public class TileService extends Service {
     // tile server port
     public static int PORT;
     // tile server root directory path

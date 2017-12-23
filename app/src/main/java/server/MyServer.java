@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
+import server.request.Method;
 import server.response.Response;
 import server.response.Status;
 
@@ -37,15 +40,31 @@ public class MyServer extends NanoHTTPD {
      */
     @Override
     public Response handle(IHTTPSession session) {
-        InputStream stream = null;
-        try {
-            File file = new File(this.mRootPath + session.getUri());
-            // if tile not found - return no tile
-            stream = ((!file.exists() || (file.exists() && file.isDirectory())) ? new ByteArrayInputStream(this.mNoTile) : new FileInputStream(file));
-            return Response.newChunkedResponse(Status.OK, "image/png", stream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return Response.newFixedLengthResponse(Status.NOT_FOUND, "text/plain", e.getMessage());
+        Method method = session.getMethod();
+
+        if (Method.POST.equals(method) || Method.PUT.equals(method)) {
+            // POST request
+            Map<String, String> data = new HashMap<>();
+            try {
+                session.parseBody(data);
+                String body = session.getQueryParameterString();
+                //String param = session.getParameters();
+            } catch (IOException | ResponseException e) {
+                e.printStackTrace();
+            }
+            return Response.newFixedLengthResponse(Status.OK, "text/plain", "POST");
+        } else {
+            // GET request
+            InputStream stream;
+            try {
+                File file = new File(this.mRootPath + session.getUri());
+                // if tile not found - return no tile
+                stream = ((!file.exists() || (file.exists() && file.isDirectory())) ? new ByteArrayInputStream(this.mNoTile) : new FileInputStream(file));
+                return Response.newChunkedResponse(Status.OK, "image/png", stream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return Response.newFixedLengthResponse(Status.NOT_FOUND, "text/plain", e.getMessage());
+            }
         }
     }
 }
