@@ -63,10 +63,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonStart:
 
                 // START the service
-                TileServer.PORT = this.serverPort;
-                TileServer.ROOT_PATH = this.rootPath;
-                TileServer.NO_TILE = this.getNoTileFile();
-                Intent serviceToStart = new Intent(this, TileServer.class);
+                TileService.PORT = this.serverPort;
+                TileService.ROOT_PATH = this.rootPath;
+                TileService.NO_TILE = this.getNoTileFile();
+                Intent serviceToStart = new Intent(this, TileService.class);
                 startService(serviceToStart);
 
                 this.running = true;
@@ -79,7 +79,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonStop:
 
                 // STOP the service
-                Intent serviceToStop = new Intent(this, TileServer.class);
+                Intent serviceToStop = new Intent(this, TileService.class);
                 stopService(serviceToStop);
 
                 this.running = false;

@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.bojkosoft.bojko108.tinyandroidhttpserver.MainActivity;
 import com.bojkosoft.bojko108.tinyandroidhttpserver.R;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 import server.MyServer;
 
-public class TileServer extends Service {
+public class TileService extends Service {
     // tile server port
     public static int PORT;
     // tile server root directory path
@@ -60,7 +61,10 @@ public class TileServer extends Service {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setOngoing(true)
                 .setContentTitle(getResources().getString(R.string.app_name))
-                .setContentText(getResources().getString(R.string.app_notification) + PORT)
+                .setStyle(new Notification.InboxStyle()
+                        .addLine(getResources().getString(R.string.app_notif_local_tiles) + "localhost:" + PORT + "/")
+                        .addLine(getResources().getString(R.string.app_notif_redirect) + "localhost:" + PORT + "/redirect/")
+                        .setBigContentTitle(getResources().getString(R.string.app_name)))
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pendingIntent);
 

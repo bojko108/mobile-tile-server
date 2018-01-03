@@ -23,11 +23,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_title" />
-        <activity
-            android:name=".ExplorerActivity"
-            android:label="@string/explorer_activity_name" />
 
-        <service android:name=".TileServer" />
+        <service android:name=".TileService" />
     </application>
 
 </manifest>

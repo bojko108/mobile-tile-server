@@ -2,6 +2,8 @@
     <!-- Strings related to UI -->
     <string name="app_name">Offline Tile Server</string>
     <string name="app_notification">Running on port: </string>
+    <string name="app_notif_local_tiles">local tiles: </string>
+    <string name="app_notif_redirect">redirect: </string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_yes">Yes</string>
