@@ -18,4 +18,7 @@
     <string name="button_text_stop">Спиране</string>
     <string name="button_text_settings">Настройки</string>
     <string name="settings_reset_category">Възстановяване на началните настройки</string>
+    <string name="explorer_activity_name">File Explorer</string>
+    <string name="app_notif_local_tiles">"локални карти: "</string>
+    <string name="app_notif_redirect">"с пренасочване: "</string>
 </resources>
