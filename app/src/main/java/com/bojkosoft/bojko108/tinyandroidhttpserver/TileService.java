@@ -61,10 +61,9 @@ public class TileService extends Service {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setOngoing(true)
                 .setContentTitle(getResources().getString(R.string.app_name))
-                //.setContentText(getResources().getString(R.string.app_notification) + PORT)
                 .setStyle(new Notification.InboxStyle()
-                        .addLine(getResources().getString(R.string.app_notif_local_tiles) + "http://localhost:" + PORT + "/")
-                        .addLine(getResources().getString(R.string.app_notif_redirect) + "http://localhost:" + PORT + "/redirect/")
+                        .addLine(getResources().getString(R.string.app_notif_local_tiles) + "localhost:" + PORT + "/")
+                        .addLine(getResources().getString(R.string.app_notif_redirect) + "localhost:" + PORT + "/redirect/")
                         .setBigContentTitle(getResources().getString(R.string.app_name)))
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pendingIntent);
