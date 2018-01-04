@@ -2,8 +2,10 @@
     <!-- Strings related to UI -->
     <string name="app_name">Offline Tile Server</string>
     <string name="app_notification">Running on port: </string>
-    <string name="app_notif_local_tiles">local tiles: </string>
-    <string name="app_notif_redirect">redirect: </string>
+    <string name="app_notif_local_tiles">to access local tiles:</string>
+    <string name="app_notif_redirect">to redirect to another server:</string>
+    <string name="title_activity_info">Help</string>
+    <string name="button_text_info">Help</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_yes">Yes</string>
@@ -11,6 +13,19 @@
     <string name="button_text_start">Start</string>
     <string name="button_text_stop">Stop</string>
     <string name="button_text_settings">Settings</string>
+
+    <!-- Strings relared to Help activity -->
+    <string name="help_example">example</string>
+    <string name="help_main">Offline Tile Server can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses XYZ Tile schema.</string>
+    <string name="help_options_header">The application provides two options:\n- Access of local Map Tiles\n- Redirect to a Tile Server with QuadKey Tile schema</string>
+    <string name="help_options_1_header">Access of local Map Tiles</string>
+    <string name="help_options_1_1">Local Map Tiles can be accessed on address:</string>
+    <string name="help_options_1_2">Where the PORT is set in application settings. A directory, where the files are stored must also be specified in settings. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.</string>
+    <string name="help_options_1_example">If you have map tiles stored in \"/storage/9016-4EF8/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\", you can set the root directory to: \"/storage/9016-4EF8/OfflineTiles\". Then in order to access this map just start the service and navigate to:\n\n\"http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\".\n\nIn this case the root directory points to the parent folder (which contains \"Plovdiv\" subfolder). This way you can have multiple subfolders containing different map tiles and all can be accessed through the same server!</string>
+    <string name="help_options_2_header">Redirect to a Tile Server with QuadKey Tile schema</string>
+    <string name="help_options_2_1">Redirect can be accessed on address:</string>
+    <string name="help_options_2_2">Where the PORT is set in application settings. A directory, where the files are stored must also be specified in settings. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.\n\nThere are several parameters, which must be provided:\n- \"url\": url address on which to redirect\n- \"quadkey\": \"true\" if the server uses QuadKey Tile schema\n- \"x\": x coordinate of a map tile\n- \"y\": y coordinate of a map tile\n- \"z\": z coordinate of a map tile</string>
+    <string name="help_options_2_example">If you want to use for example Bing Maps, which uses QuadKey Tile schema and you only have XYZ tile coordinates you can use the redirect option, which will calculate the quadkey value and then will redirect the request to the server. For accessing Bing Maps Aerial map tiles you can navigate to:\n\n\"http://localhost:1886/redirect/\n?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201\n&amp;quadkey=true&amp;x={x}&amp;z={y}&amp;z={z}\"\n\n</string>
 
     <!-- Strings related to Settings -->
     <string name="settings_title">Settings</string>
