@@ -114,10 +114,10 @@ public class MyServer extends NanoHTTPD {
 
         try {
             if (parameters.get("quadkey").get(0).equals("true")) {
-                // String url = parameters.get("url").get(0);
 
                 // TODO: read this url from a config!
-                String url = "http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201";
+                //String url = "http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201";
+                String url = parameters.get("url").get(0);
 
                 int z = Integer.parseInt(parameters.get("z").get(0));
                 int x = Integer.parseInt(parameters.get("x").get(0));
