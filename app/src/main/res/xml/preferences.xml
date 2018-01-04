@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings_title">
     <EditTextPreference
         android:defaultValue="@string/settings_server_port_default"
         android:key="@string/serverport"
-        android:title="@string/settings_server_port"
-        android:summary="@string/settings_server_port_details"
+        android:maxLength="4"
         android:numeric="integer"
-        android:maxLength="4"/>
+        android:summary="@string/settings_server_port_details"
+        android:title="@string/settings_server_port" />
     <EditTextPreference
         android:defaultValue="@string/settings_root_path_default"
         android:key="@string/rootpath"
-        android:title="@string/settings_root_path"
-        android:summary="@string/settings_root_path_details" />
+        android:summary="@string/settings_root_path_details"
+        android:title="@string/settings_root_path" />
     <SwitchPreference
-        android:key="@string/running"
-        android:title="@string/settings_status"
         android:defaultValue="false"
         android:enabled="false"
-        android:selectable="false" />
+        android:key="@string/running"
+        android:selectable="false"
+        android:title="@string/settings_status" />
     <PreferenceCategory
-        android:title="@string/settings_reset_category"
         android:key="@string/pref_key_storage_settings"
-        android:selectable="false" >
+        android:selectable="false"
+        android:title="@string/settings_reset_category">
         <Preference
             android:key="@string/settings_reset_button"
             android:selectable="true"
