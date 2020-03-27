@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TinyAndroidHTTPServer.iml" filepath="$PROJECT_DIR$/TinyAndroidHTTPServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mobile-tile-server.iml" filepath="$PROJECT_DIR$/mobile-tile-server.iml" />
     </modules>
   </component>
 </project>

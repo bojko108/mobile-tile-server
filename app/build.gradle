@@ -7,14 +7,28 @@ android {
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
-        versionName "2.2"
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "MobileTileServer-v${variant.versionName}-release.apk"
+                }
+            }
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "MobileTileServer-v${variant.versionName}.apk"
+                }
+            }
         }
     }
 }
