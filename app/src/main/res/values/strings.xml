@@ -2,8 +2,8 @@
     <!-- Strings related to UI -->
     <string name="app_name">Mobile Tile Server</string>
     <string name="app_notification">Running on port: </string>
-    <string name="app_notif_local_tiles">to access local tiles:</string>
-    <string name="app_notif_redirect">to redirect to another server:</string>
+    <string name="app_notif_local_tiles">To access local tiles go to:</string>
+    <string name="app_notif_redirect">To redirect to another server:</string>
     <string name="title_activity_info">Help</string>
     <string name="button_text_info">Help</string>
     <string name="dialog_ok">OK</string>
@@ -16,7 +16,7 @@
 
     <!-- Strings relared to Help activity -->
     <string name="help_example">example</string>
-    <string name="help_main">Mobile Tile Server (v3.0) can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses XYZ Tile schema.</string>
+    <string name="help_main">Mobile Tile Server (v%s) can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses XYZ Tile schema.</string>
     <string name="help_options_header">The application provides two options:\n- Access of local Map Tiles\n- Redirect to a Tile Server with QuadKey Tile schema</string>
     <string name="help_options_1_header">Access to local Map Tiles</string>
     <string name="help_options_1_1">Local Map Tiles can be accessed on address:</string>
@@ -35,7 +35,7 @@
     <string name="settings_server_port_default" translatable="false">1886</string>
     <string name="settings_root_path">Tiles root directory path</string>
     <string name="settings_root_path_details">Specify root directory path where the map tiles are stored</string>
-    <string name="settings_root_path_default" translatable="false">/storage/9016-4EF8/OfflineTiles</string>
+    <string name="settings_root_path_default" translatable="false">/storage/C87C-E1DB/OfflineTiles</string>
     <string name="settings_status">Tile server running</string>
     <string name="settings_reset_category">Restore default settings</string>
     <string name="settings_reset">Restore</string>

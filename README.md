@@ -1,6 +1,6 @@
-# Offline Tile Server
+# Mobile Tile Server
 
-Offline Tile Server can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses [XYZ Tile schema](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames).
+Mobile Tile Server can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses [XYZ Tile schema](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames).
 
 ## Contents
 
@@ -25,7 +25,7 @@ http://localhost:PORT/
 ```
 
 Where `PORT` is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.
-If you have map tiles stored in `/storage/9016-4EF8/OfflineTiles/Plovdiv/{z}_{x}_{y}.png`, you can set the root directory to: `/storage/9016-4EF8/OfflineTiles`. Then in order to access this map just start the service and navigate to:
+If you have map tiles stored in your memory card on address `/storage/9016-4EF8/OfflineTiles/Plovdiv/{z}_{x}_{y}.png`, you can set the root directory to: `/storage/9016-4EF8/OfflineTiles`. Then in order to access this map just start the service and navigate to:
 
 ```
 http://localhost:1886/Plovdiv/{z}_{x}_{y}.png
@@ -38,7 +38,7 @@ In this case the root directory points to the parent folder (which contains `Plo
 Redirect can be accessed on address:
 
 ```
-http://localhost:PORT/redirect/?url=&quadkey=true&x=&y=&z=
+http://localhost:PORT/redirect/?url=...&quadkey=true&x=&y=&z=
 ```
 
 Where `PORT` is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.
@@ -59,13 +59,16 @@ http://localhost:1886/redirect/url=http://ecn.t0.tiles.virtualearth.net/tiles/a{
 
 ## With MyMaps
 
+An example with mapping application is comming soon!
+
+<!--
 1. Edit MyMaps's config file:
 
 ```
 /storage/emulated/0/MyMaps/offline-tiles.json
 ```
 
-2. Run MyMaps App and use the offline tiles served by the tile server.
+2. Run MyMaps App and use the offline tiles served by the tile server. -->
 
 ## License
 

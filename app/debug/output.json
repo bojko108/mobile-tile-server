@@ -1,1 +1,1 @@
-[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":1},"path":"MobileTileServer-v3.0.apk","properties":{"packageId":"com.bojkosoft.bojko108.tinyandroidhttpserver","split":"","minSdkVersion":"23"}}]
+[{"outputType":{"type":"APK"},"apkData":{"type":"MAIN","splits":[],"versionCode":1,"versionName":"3.1","enabled":true,"outputFile":"MobileTileServer-v3.1.apk","fullName":"debug","baseName":"debug"},"path":"MobileTileServer-v3.1.apk","properties":{}}]

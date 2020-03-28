@@ -1,6 +1,6 @@
 package server;
 
-import com.bojkosoft.bojko108.tinyandroidhttpserver.utils.QuadKeyGenerator;
+import com.bojkosoft.bojko108.mobiletileserver.utils.QuadKeyGenerator;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
