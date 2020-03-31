@@ -1,9 +1,6 @@
 <resources>
     <!-- Strings related to UI -->
     <string name="app_name">Mobile Tile Server</string>
-    <string name="app_notification">Running on port: </string>
-    <string name="app_notif_local_tiles">To access local tiles go to:</string>
-    <string name="app_notif_redirect">To redirect to another server:</string>
     <string name="title_activity_info">Help</string>
     <string name="button_text_info">Help</string>
     <string name="dialog_ok">OK</string>
@@ -13,29 +10,34 @@
     <string name="button_text_start">Start</string>
     <string name="button_text_stop">Stop</string>
     <string name="button_text_settings">Settings</string>
+    <string name="exception_bad_request">Mobile Tile Server supports GET requests only!</string>
 
-    <!-- Strings relared to Help activity -->
-    <string name="help_example">example</string>
-    <string name="help_main">Mobile Tile Server (v%s) can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications. The server uses XYZ Tile schema.</string>
-    <string name="help_options_header">The application provides two options:\n- Access of local Map Tiles\n- Redirect to a Tile Server with QuadKey Tile schema</string>
+    <!-- Strings related to Help activity -->
+    <string name="help_example">EXAMPLE</string>
+    <string name="help_main">Mobile Tile Server (v%s) can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different applications.</string>
+    <string name="help_options_header">The application provides three options:\n- Access of local Map Tiles\n- Access of local MBTiles files\n- Redirect to a Tile Server with QuadKey Tile schema</string>
     <string name="help_options_1_header">Access to local Map Tiles</string>
     <string name="help_options_1_1">Local Map Tiles can be accessed on address:</string>
     <string name="help_options_1_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.</string>
-    <string name="help_options_1_example">If you have map tiles stored in \"/storage/9016-4EF8/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\", you can set the root directory to: \"/storage/9016-4EF8/OfflineTiles\". Then in order to access this map just start the service and navigate to:\n\n\"http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\".\n\nIn this case the root directory points to the parent folder (which contains \"Plovdiv\" subfolder). This way you can have multiple subfolders containing different map tiles and all can be accessed through the same server!</string>
-    <string name="help_options_2_header">Redirect to a Tile Server with QuadKey Tile schema</string>
-    <string name="help_options_2_1">Redirect can be accessed on address:</string>
-    <string name="help_options_2_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.\n\nThere are several parameters, which must be provided:\n- \"url\": url address on which to redirect\n- \"quadkey\": \"true\" if the server uses QuadKey Tile schema\n- \"x\": x coordinate of a map tile\n- \"y\": y coordinate of a map tile\n- \"z\": z coordinate of a map tile</string>
-    <string name="help_options_2_example">If you want to use for example Bing Maps, which uses QuadKey Tile schema and you only have XYZ tile coordinates you can use the redirect option, which will calculate the quadkey value and then will redirect the request to the server. For accessing Bing Maps Aerial map tiles you can navigate to:\n\n\"http://localhost:1886/redirect/\n?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201\n&amp;quadkey=true&amp;x={x}&amp;z={y}&amp;z={z}\"\n\n</string>
+    <string name="help_options_1_example">If you have map tiles stored in \'/storage/emulated/0/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\', you can set the root directory to: \'/storage/emulated/0/OfflineTiles\'. Then in order to access this map just start the service and navigate to:\n\n\'http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\'.\n\nIn this case the root directory points to the parent folder (which contains \'Plovdiv\' subfolder). This way you can have multiple subfolders containing different map tiles and all can be accessed through the same server!</string>
+    <string name="help_options_2_header">Access to local MBTiles files</string>
+    <string name="help_options_2_1">Can be found on address:</string>
+    <string name="help_options_2_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.\n\nAs MBTiles use TMS schema to store map tiles, y coordinate must be transformed in order to locate the correct tile row. If your app uses XYZ tile schema, pass negative value for y (-y) as a parameter. \n\nThere are several parameters, which must be provided:\n- \'file\': MBTiles file (including extension)\n- \'z\': map zoom level\n- \'x\': x coordinate of a map tile\n- \'y\': y coordinate of a map tile</string>
+    <string name="help_options_2_example">If you have tiles stored in MBTiles format, you can place your files in the root directory and access them with:\n\n\'http://localhost:1886/mbtiles/?file=test.mbtiles&amp;z={z}&amp;x={x}&amp;y={y}\'\nor if XYZ schema is used:\n\'http://localhost:1886/mbtiles/?file=test.mbtiles&amp;z={z}&amp;x={x}&amp;y=-{y}\'</string>
+    <string name="help_options_3_header">Redirect to a Tile Server with QuadKey Tile schema</string>
+    <string name="help_options_3_1">Redirect can be accessed on address:</string>
+    <string name="help_options_3_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.\n\nThere are several parameters, which must be provided:\n- \'url\': url address on which to redirect\n- \'quadkey\': \'true\' if the server uses QuadKey Tile schema\n- \'z\': map zoom level\n- \'x\: x coordinate of a map tile\n- \'y\': y coordinate of a map tile</string>
+    <string name="help_options_3_example">If you want to use for example Bing Maps, which uses QuadKey Tile schema and you only have XYZ tile coordinates you can use the redirect option, which will calculate the quadkey value and then will redirect the request to the server. For accessing Bing Maps Aerial map tiles you can navigate to:\n\n\'http://localhost:1886/redirect/?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201&amp;quadkey=true&amp;z={z}&amp;x={x}&amp;y={y}\'</string>
 
     <!-- Strings related to Settings -->
     <string name="settings_title">Settings</string>
     <string name="restore_defaults">Do you want to reset all settings to default values?</string>
-    <string name="settings_server_port">Server port</string>
-    <string name="settings_server_port_details">Specify port for running the tile server</string>
+    <string name="settings_server_port">Listening port</string>
+    <string name="settings_server_port_details">Specify listening port for the tile server</string>
     <string name="settings_server_port_default" translatable="false">1886</string>
     <string name="settings_root_path">Tiles root directory path</string>
     <string name="settings_root_path_details">Specify root directory path where the map tiles are stored</string>
-    <string name="settings_root_path_default" translatable="false">/storage/C87C-E1DB/OfflineTiles</string>
+    <string name="settings_root_path_default" translatable="false">/storage/emulated/0/OfflineTiles</string>
     <string name="settings_status">Tile server running</string>
     <string name="settings_reset_category">Restore default settings</string>
     <string name="settings_reset">Restore</string>
@@ -45,4 +47,18 @@
     <string name="rootpath" translatable="false">rootpath</string>
     <string name="running" translatable="false">running</string>
     <string name="explorer_activity_name">File Explorer</string>
+    <string name="app_not_title">Up and running!</string>
+    <string name="app_not_text">Control the tile server from here:</string>
+    <string name="server_action_stop">Stop Server</string>
+    <string name="server_action_start">Start Server</string>
+    <string name="server_action_stop_short">Stop</string>
+    <string name="server_action_start_short">Start</string>
+    <string name="server_action_navigate">Navigate To</string>
+    <string name="server_action_navigate_short">Navigate</string>
+    <string name="server_action_browse">Browse Files</string>
+    <string name="server_action_browse_short">Browse</string>
+    <string name="web_page_title_mbtiles" translatable="false">Available MBTiles Tilesets</string>
+    <string name="web_page_details_mbtiles" translatable="false">This is a list of all MBTiles tilesets, served from this server:</string>
+    <string name="web_page_title_tiles" translatable="false">Available directories with tiles</string>
+    <string name="web_page_details_tiles" translatable="false">This is a list of all directories, containing tiles and are served from this service:</string>
 </resources>

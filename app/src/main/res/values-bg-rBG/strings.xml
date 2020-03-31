@@ -6,10 +6,9 @@
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Не</string>
     <string name="restore_defaults">Наистина ли искате ли да възстановите настройките по подразбиране?</string>
-    <string name="app_notification">"Стартиран на port: "</string>
     <string name="settings_title">Настройки</string>
-    <string name="settings_server_port">Сървър port</string>
-    <string name="settings_server_port_details">Задайте port, на който да работи сървъра</string>
+    <string name="settings_server_port">Сървър порт</string>
+    <string name="settings_server_port_details">Задайте порт, на който да работи сървъра</string>
     <string name="settings_root_path">Директория, съдържаща тайлове</string>
     <string name="settings_root_path_details">Задайте директорията, в която се съхраняват тайлове</string>
     <string name="settings_status">Сървърът е стартиран</string>
@@ -19,19 +18,32 @@
     <string name="button_text_settings">Настройки</string>
     <string name="settings_reset_category">Възстановяване на началните настройки</string>
     <string name="explorer_activity_name">File Explorer</string>
-    <string name="app_notif_local_tiles">"за достъп до локални карти: "</string>
-    <string name="app_notif_redirect">за пренасочване:</string>
     <string name="title_activity_info">Помощ</string>
     <string name="button_text_info">Помощ</string>
-    <string name="help_main">Mobile Tile Server (v%s) може да се използва като HTTP сървър, предоставящ достъп до карти, съхранявани на мобилното устройство. При стартиран сървър, вие може да достъпвате картите от различни приложения. Сървърът използва схема XYZ.</string>
-    <string name="help_options_header">Приложението предоставя две възможности:\n- Достъп до локални карти\n- Пренасочване към друг картен сървър с QuadKey схема</string>
+    <string name="help_main">Mobile Tile Server (v%s) може да се използва като HTTP сървър, предоставящ достъп до карти, съхранявани на мобилното устройство. При стартиран сървър, вие може да достъпвате картите от различни приложения.</string>
+    <string name="help_options_header">Приложението предоставя две възможности:\n- Достъп до локални карти\n- Достъп до карти съхранявани във формат MBTiles\n- Пренасочване към друг картен сървър с QuadKey схема</string>
     <string name="help_options_1_1">Локалните карти са достъпни на адрес:</string>
     <string name="help_options_1_2">Където стойността на PORT е зададена в настройките на приложението. Директорията, в която се намират картите също трябва да бъде зададена там. Тази директория се използва като основна от сървъра. Всички файлове и поддиректории в основната директория са достъпни от сървъра.</string>
-    <string name="help_options_2_header">Пренасочване към друг картен сървър с QuadKey схема</string>
+    <string name="help_options_3_header">Пренасочване към друг картен сървър с QuadKey схема</string>
     <string name="help_options_1_header">Достъп до локални карти</string>
-    <string name="help_example">пример</string>
-    <string name="help_options_1_example">Ако разполагате с карта, съхранявана в директория: \"/storage/9016-4EF8/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\" можете да зададете основната директория така: \"/storage/9016-4EF8/OfflineTiles\". За да достъпите тази карта стартирайте сървъра и отидете на адрес:\n\n\"http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\".\n\nВ случая основната директория сочи към родителската директория (тя съдържа поддиректория \"Plovdiv\"). По този начин може да разполагате с различни карти, подредени в поддиректории и те да са достъпни на един и същи сървър!</string>
-    <string name="help_options_2_1">Пренасочването е достъпно на адрес:</string>
-    <string name="help_options_2_example">Ако искате да използвате например Bing Maps, която използва QuadKey схема, но разполагате само с XYZ коориднати на картите може да използвате опцията за пренасочване, която ще калкулира QuadKey стойността и ще пренасочи заявката към съответняит сървър. За достъп до Bing Maps Aerial може да зададете адрес:\n\n\"http://localhost:1886/redirect/\n?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201\n&amp;quadkey=true&amp;x={x}&amp;z={y}&amp;z={z}\"\n\n</string>
-    <string name="help_options_2_2">Където стойността на PORT е зададена в настройките на приложението. Директорията, в която се намират картите също трябва да бъде зададена там. Тази директория се използва като основна от сървъра. Всички файлове и поддиректории в основната директория са достъпни от сървъра.\n\nСъществуват няколко параметъра, чиито стойности трябва да бъдат зададени:\n- \"url\": адрес, към който да се пренасочи\n- \"quadkey\": \"true\" ако сървъра използва QuadKey схема\n- \"x\": x координатата на карта\n- \"y\": y координатата на карта\n- \"z\": z координатата на карта</string>
+    <string name="help_example">ПРИМЕР</string>
+    <string name="help_options_1_example">Ако разполагате с карта, съхранявана в директория: \'/storage/emulated/0/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\' можете да зададете основната директория така: \'/storage/emulated/0/OfflineTiles\'. За да достъпите тази карта стартирайте сървъра и отидете на адрес:\n\n\'http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\'.\n\nВ случая основната директория сочи към родителската директория (тя съдържа поддиректория \'Plovdiv\'). По този начин може да разполагате с различни карти, подредени в поддиректории и те да са достъпни на един и същи сървър!</string>
+    <string name="help_options_3_1">Пренасочването е достъпно на адрес:</string>
+    <string name="help_options_3_example">Ако искате да използвате например Bing Maps, която използва QuadKey схема, но разполагате само с XYZ коориднати на картите може да използвате опцията за пренасочване, която ще калкулира QuadKey стойността и ще пренасочи заявката към съответняит сървър. За достъп до Bing Maps Aerial може да зададете адрес:\n\n\'http://localhost:1886/redirect/?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201&amp;quadkey=true&amp;z={z}&amp;x={x}&amp;y={y}\'</string>
+    <string name="help_options_3_2">Където стойността на PORT е зададена в настройките на приложението. Директорията, в която се намират картите също трябва да бъде зададена там. Тази директория се използва като основна от сървъра. Всички файлове и поддиректории в основната директория са достъпни от сървъра.\n\nСъществуват няколко параметъра, чиито стойности трябва да бъдат зададени:\n- \'url\': адрес, към който да се пренасочи\n- \'quadkey\': \'true\' ако сървъра използва QuadKey схема\n- \'z\': ниво на мащаба на картата\n- \'x\': x координатата на карта\n- \'y\': y координатата на карта</string>
+    <string name="help_options_2_1">Може да се достъпи на адрес:</string>
+    <string name="help_options_2_header">Достъп до карти във формат MBTiles</string>
+    <string name="help_options_2_example">"Ако разполагате с карти във формат MBTiles можете да ги заредите в основната директория и да ги достъпите чрез:\n\n\'http://localhost:1886/mbtiles/?file=test.mbtiles&amp;z={z}&amp;x={x}&amp;y={y}\'\nили ако се използва XYZ схема:\n\'http://localhost:1886/mbtiles/?file=test.mbtiles&amp;z={z}&amp;x={x}&amp;y=-{y}\'"</string>
+    <string name="help_options_2_2">Където стойността на PORT е зададена в настройките на приложението. Директорията, в която се намират картите също трябва да бъде зададена там. Тази директория се използва като основна от сървъра. Всички файлове и поддиректории в основната директория са достъпни от сървъра. \n\nMBTiles използват TMS схема на пдоредба ма тайловете и y координатата трябва да се трансформира, за да се намери точният тайл. Ако картата използва XYZ схема, подайте отрицателна стойност за y (-y). \n\nИма няколко параметъра, които трябва да се зададат:\n- \'file\': име на MBTiles файл (включително разширението)\n- \'z\': ниво на мащаб на картата\n- \'x\': x координата на картата\n- \'y\': y координата на картата</string>
+    <string name="exception_bad_request">Mobile Tile Server поддържа само GET заявки!</string>
+    <string name="app_not_title">Сървърът е стартиран!</string>
+    <string name="app_not_text">Управлявайте сървърът от тук:</string>
+    <string name="server_action_stop">Спри сървъра</string>
+    <string name="server_action_start">Стартирай сървъра</string>
+    <string name="server_action_stop_short">Спри</string>
+    <string name="server_action_start_short">Стартирай</string>
+    <string name="server_action_navigate_short">Отиди до</string>
+    <string name="server_action_browse_short">Отвори</string>
+    <string name="server_action_browse">Отвори файловете</string>
+    <string name="server_action_navigate">Отиди до</string>
 </resources>

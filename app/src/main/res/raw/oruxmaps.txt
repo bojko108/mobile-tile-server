@@ -1,0 +1,11 @@
+<onlinemapsource uid="FILL_UNIQUE_ID_VALUE">
+    <name>{{name}}</name>
+    <url><![CDATA[{{url}}]]></url>
+    <minzoom>{{min_zoom}}</minzoom>
+    <maxzoom>{{max_zoom}}</maxzoom>
+    <projection>MERCATORESFERICA</projection>
+    <cacheable>0</cacheable>
+    <downloadable>1</downloadable>
+    <maxtilesday>0</maxtilesday>
+    <maxthreads>0</maxthreads>
+</onlinemapsource>

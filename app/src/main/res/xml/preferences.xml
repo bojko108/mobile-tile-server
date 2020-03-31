@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/settings_title">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:title="@string/settings_title">
+
     <EditTextPreference
-        android:defaultValue="@string/settings_server_port_default"
-        android:key="@string/serverport"
-        android:maxLength="4"
-        android:numeric="integer"
-        android:summary="@string/settings_server_port_details"
-        android:title="@string/settings_server_port" />
+        app:defaultValue="@string/settings_server_port_default"
+        app:key="@string/serverport"
+        app:summary="@string/settings_server_port_details"
+        app:title="@string/settings_server_port" />
     <EditTextPreference
-        android:defaultValue="@string/settings_root_path_default"
-        android:key="@string/rootpath"
-        android:summary="@string/settings_root_path_details"
-        android:title="@string/settings_root_path" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:enabled="false"
-        android:key="@string/running"
-        android:selectable="false"
-        android:title="@string/settings_status" />
+        app:defaultValue="@string/settings_root_path_default"
+        app:key="@string/rootpath"
+        app:summary="@string/settings_root_path_details"
+        app:title="@string/settings_root_path" />
+
     <PreferenceCategory
-        android:key="@string/pref_key_storage_settings"
-        android:selectable="false"
-        android:title="@string/settings_reset_category">
+        app:key="@string/pref_key_storage_settings"
+        app:selectable="false"
+        app:title="@string/settings_reset_category">
         <Preference
-            android:key="@string/settings_reset_button"
-            android:selectable="true"
-            android:title="@string/settings_reset" />
+            app:key="@string/settings_reset_button"
+            app:selectable="true"
+            app:title="@string/settings_reset" />
     </PreferenceCategory>
 </PreferenceScreen>

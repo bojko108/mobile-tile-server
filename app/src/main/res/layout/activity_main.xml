@@ -6,34 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:contentDescription="@string/button_text_start"
-        android:src="@drawable/icon_start"
+        android:text="@string/button_text_start"
+        android:height="70dp"
+        app:icon="@drawable/ic_start_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/button_text_stop"
-        android:src="@drawable/icon_stop"
+        android:text="@string/button_text_stop"
+        android:height="70dp"
+        app:icon="@drawable/ic_stop_24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonStart" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonSettings"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/button_text_settings"
-        android:src="@drawable/icon_settings"
+        android:text="@string/button_text_settings"
+        android:height="70dp"
         app:layout_constraintHorizontal_bias="0.852"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -43,10 +45,10 @@
         android:id="@+id/imageTiles"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/img_tiles"
         app:layout_constraintBottom_toTopOf="@+id/buttonStop"

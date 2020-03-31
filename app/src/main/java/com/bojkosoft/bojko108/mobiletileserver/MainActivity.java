@@ -2,29 +2,37 @@ package com.bojkosoft.bojko108.mobiletileserver;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.bojkosoft.bojko108.mobiletileserver.server.TileService;
+import com.bojkosoft.bojko108.mobiletileserver.server.TileServiceReceiver;
+import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    // used to ping TileService to see if it's running
+    private LocalBroadcastManager manager;
 
     // server port and root path: stored in shared preferences
     private int serverPort;
     private String rootPath;
-    // internal use - true when tile server is up and running
     private boolean running;
 
     // Storage Permissions
@@ -39,6 +47,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.manager = LocalBroadcastManager.getInstance(this);
+
         findViewById(R.id.buttonStart).setOnClickListener(this);
         findViewById(R.id.buttonStop).setOnClickListener(this);
         findViewById(R.id.buttonSettings).setOnClickListener(this);
@@ -50,58 +60,66 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onResume() {
         super.onResume();
 
+        this.manager.registerReceiver(this.localReceiver, new IntentFilter(TileService.ACTION_RUNNING));
+
+        // will be evaluated in the local broadcast
+        this.running = false;
+        this.manager.sendBroadcastSync(new Intent(TileService.ACTION_PING));
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         this.serverPort = Integer.parseInt(prefs.getString("serverport", getResources().getString(R.string.settings_server_port_default)));
         this.rootPath = prefs.getString("rootpath", getResources().getString(R.string.settings_root_path_default));
-        this.running = prefs.getBoolean("running", false);
 
-        this.setUpUI();
+        this.prepareUI();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.manager.unregisterReceiver(this.localReceiver);
     }
 
     @Override
     public void onClick(View v) {
-        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-
         switch (v.getId()) {
             case R.id.buttonStart:
-
-                // START the service
-                TileService.PORT = this.serverPort;
-                TileService.ROOT_PATH = this.rootPath;
-                TileService.NO_TILE = this.getNoTileFile();
-                Intent serviceToStart = new Intent(this, TileService.class);
-                startService(serviceToStart);
-
-                this.running = true;
-                prefs.putBoolean(getString(R.string.running), true);
-                prefs.apply();
-
-                this.setUpUI();
-
+                this.startTileService();
                 break;
             case R.id.buttonStop:
-
-                // STOP the service
-                Intent serviceToStop = new Intent(this, TileService.class);
-                stopService(serviceToStop);
-
-                this.running = false;
-                prefs.putBoolean(getString(R.string.running), false);
-                prefs.apply();
-
-                this.setUpUI();
-
+                this.stopTileService();
                 break;
             case R.id.buttonSettings:
-
                 // OPEN settings dialog
                 Intent preferencesIntent = new Intent(this, SettingsActivity.class);
                 startActivity(preferencesIntent);
-
                 break;
             default:
                 break;
         }
+    }
+
+    private void startTileService() {
+        Intent startServerIntent = new Intent(this, TileServiceReceiver.class);
+        startServerIntent.setAction(TileServiceReceiver.ACTION_START);
+        startServerIntent.putExtra(TileService.KEY_SERVER_PORT, this.serverPort);
+        startServerIntent.putExtra(TileService.KEY_ROOT_PATH, this.rootPath);
+
+        sendBroadcast(startServerIntent);
+
+        this.running = true;
+
+        this.prepareUI();
+    }
+
+    private void stopTileService() {
+        Intent stopServerIntent = new Intent(this, TileServiceReceiver.class);
+        stopServerIntent.setAction(TileServiceReceiver.ACTION_STOP);
+
+        sendBroadcast(stopServerIntent);
+
+        this.running = false;
+
+        this.prepareUI();
     }
 
     @Override
@@ -113,65 +131,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.startInfo:
-                this.startInfoActivity();
-                break;
+        if (R.id.startInfo == item.getItemId()) {
+            Intent intent = new Intent(this, InfoActivity.class);
+            startActivity(intent);
         }
         return true;
     }
 
-    private void startInfoActivity() {
-        Intent infoIntent = new Intent(this, InfoActivity.class);
-        startActivity(infoIntent);
-    }
-
-    private void setUpUI() {
+    private void prepareUI() {
         ImageView buttonTile = findViewById(R.id.imageTiles);
-        ImageView buttonStart = (ImageButton) findViewById(R.id.buttonStart);
-        ImageView buttonStop = (ImageButton) findViewById(R.id.buttonStop);
+        MaterialButton buttonStart = (MaterialButton) findViewById(R.id.buttonStart);
+        MaterialButton buttonStop = (MaterialButton) findViewById(R.id.buttonStop);
 
         if (this.running) {
             buttonTile.setImageAlpha(255);
 
-            buttonStart.setImageAlpha(50);
-            buttonStop.setImageAlpha(255);
+            buttonStart.setAlpha(.3f);
+            buttonStop.setAlpha(1f);
 
-            buttonStart.setEnabled(false);
-            buttonStop.setEnabled(true);
+            buttonStart.setClickable(false);
+            buttonStop.setClickable(true);
         } else {
             buttonTile.setImageAlpha(50);
 
-            buttonStart.setImageAlpha(255);
-            buttonStop.setImageAlpha(50);
+            buttonStart.setAlpha(1f);
+            buttonStop.setAlpha(.3f);
 
-            buttonStart.setEnabled(true);
-            buttonStop.setEnabled(false);
+            buttonStart.setClickable(true);
+            buttonStop.setClickable(false);
         }
-    }
-
-    /**
-     * Get no data tile as byte[]
-     *
-     * @return byte[]
-     */
-    private byte[] getNoTileFile() {
-        InputStream stream = getResources().openRawResource(R.raw.no_tile);
-
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        byte[] data = new byte[16384];
-
-        try {
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return buffer.toByteArray();
     }
 
     /**
@@ -179,12 +167,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
-     * @param activity
+     * @param activity this activity
      */
     private void checkPermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
+        if (PackageManager.PERMISSION_GRANTED != permission) {
             // ask user for permissions
             ActivityCompat.requestPermissions(
                     activity,
@@ -193,4 +181,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
             );
         }
     }
+
+    /**
+     * This local broadcast is used to simply ping {@link TileService} to see if
+     * it is running
+     */
+    protected BroadcastReceiver localReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TileService.ACTION_RUNNING.equals(intent.getAction())) {
+                running = true;
+            }
+        }
+    };
 }

@@ -1,60 +1,69 @@
 package com.bojkosoft.bojko108.mobiletileserver;
 
-import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.widget.EditText;
 
-import com.bojkosoft.bojko108.mobiletileserver.utils.PromptDialogFragment;
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
 
-public class SettingsActivity extends PreferenceActivity implements PromptDialogFragment.PromptDialogListener {
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+
+public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+        setContentView(R.layout.activity_settings);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, new SettingsFragment())
+                .commit();
     }
 
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        // restore default settings when "Reset" is clicked
-        PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-
-        // close this activity so the settings get updated
-        this.finish();
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        // do nothing with settings
-    }
-
-    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, EditTextPreference.OnBindEditTextListener {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            addPreferencesFromResource(R.xml.preferences);
-
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.preferences, rootKey);
             findPreference(getString(R.string.settings_reset_button)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.rootpath)).setOnPreferenceClickListener(this);
+
+            ((EditTextPreference) getPreferenceManager().findPreference(getResources().getString(R.string.serverport))).setOnBindEditTextListener(this);
         }
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-
-            boolean resultHandled = false;
-
             if (preference.getKey().equals(getString(R.string.settings_reset_button))) {
-                PromptDialogFragment dialog = new PromptDialogFragment();
-                dialog.setContent(getString(R.string.restore_defaults));
-                dialog.show(getFragmentManager(), "resetpreferences");
-                resultHandled = true;
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+                builder.setTitle("Reset preferences")
+                        .setMessage(getString(R.string.restore_defaults))
+                        .setNegativeButton(getString(R.string.dialog_no), null)
+                        .setPositiveButton(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // restore default settings when "Reset" is clicked
+                                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().clear().commit();
+                                PreferenceManager.setDefaultValues(getContext(), R.xml.preferences, true);
+                                // close this activity so the settings get updated
+                                getActivity().finish();
+                            }
+                        })
+                        .create();
+
+                builder.show();
             }
 
-            return resultHandled;
+            return true;
+        }
+
+        @Override
+        public void onBindEditText(@NonNull EditText editText) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
     }
 }

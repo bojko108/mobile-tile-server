@@ -1,13 +1,11 @@
 package com.bojkosoft.bojko108.mobiletileserver;
 
-import android.Manifest;
-import android.content.pm.PackageInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
 import android.widget.TextView;
 
-public class InfoActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class InfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

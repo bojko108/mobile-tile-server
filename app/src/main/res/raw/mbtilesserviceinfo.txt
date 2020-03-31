@@ -1,0 +1,50 @@
+<li>
+    <span><b>{{tileset_name}}</b> - <a href='../preview/mbtiles?tileset={{tileset_name}}'>preview with Leaflet viewer</a></span>
+    <div class="rTable">
+        <div class="rTableRow">
+            <div class="rTableHead"><strong>Property</strong></div>
+            <div class="rTableHead"><strong>Value</strong></div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Name</div>
+            <div class="rTableCell">{{name}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Version</div>
+            <div class="rTableCell">{{version}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Description</div>
+            <div class="rTableCell">{{description}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Min Zoom</div>
+            <div class="rTableCell">{{min_zoom}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Max Zoom</div>
+            <div class="rTableCell">{{max_zoom}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Bounds</div>
+            <div class="rTableCell">{{bounds}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">Center</div>
+            <div class="rTableCell">{{center}}</div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">For use in OruxMaps App</div>
+            <div class="rTableCell">
+                <span>Add this to the app configuration file stored in:<br/>
+                <span><i>/storage/emulated/0/oruxmaps/mapfiles/onlinemapsources.xml</i></span><br/>
+                <span>Do not forget to set the correct <i>uid</i> value in the xml!</span><br/>
+                <pre class="code">
+                    <code class="language-xml">
+                        <xmp>{{oruxmaps}}</xmp>
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+</li>

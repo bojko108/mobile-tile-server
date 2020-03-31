@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/shortcut_stop_icon"
+        android:shortcutId="stop"
+        android:shortcutLongLabel="@string/server_action_stop"
+        android:shortcutShortLabel="@string/server_action_stop_short">
+        <intent
+            android:action="mobiletileserver.ACTION_STOP"
+            android:targetClass="com.bojkosoft.bojko108.mobiletileserver.ShortcutsActivity"
+            android:targetPackage="com.bojkosoft.bojko108.mobiletileserver" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/shortcut_start_icon"
+        android:shortcutId="start"
+        android:shortcutLongLabel="@string/server_action_start"
+        android:shortcutShortLabel="@string/server_action_start_short">
+        <intent
+            android:action="mobiletileserver.ACTION_START"
+            android:targetClass="com.bojkosoft.bojko108.mobiletileserver.ShortcutsActivity"
+            android:targetPackage="com.bojkosoft.bojko108.mobiletileserver" />
+    </shortcut>
+</shortcuts>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        ng-strict-di>
+    <head>
+        <title>Mobile Tile Server</title>
+    </head>
+    <body>
+        <h1 id="mobile-tile-server">Mobile Tile Server</h1>
+        <h1 id="mobile-tile-server-ver">v3.2</h1>
+
+
+        <h1>
+            <a href="/mbtiles">AVAILABLE MBTILES</a>
+        </h1>
+        <h1>
+            <a href="/tiles">AVAILABLE TILES</a>
+        </h1>
+
+        <p>
+            Mobile Tile Server can be used as a HTTP server, serving Map Tiles from the device
+            storage. When the server is running you can access the tiles
+            from different applications. The server uses
+            <a href="https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">XYZ Tile schema</a>.
+        </p>
+        <h2 id="contents">Contents</h2>
+        <ul>
+            <li>
+                <a href="#how-to-use">How to use</a>
+                <ul>
+                    <li>
+                        <a href="#access-to-local-map-tiles">Access to local Map Tiles</a>
+                    </li>
+                    <li>
+                        <a href="#access-to-local-mbtiles-files">Access to local MBTiles files</a>
+                    </li>
+                    <li>
+                        <a href="#redirect-to-a-tile-server-with-quadkey-tile-schema">Redirect to a
+                            Tile Server with QuadKey Tile schema
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <h2 id="how-to-use">How to use</h2>
+        <p>The application provides three options:</p>
+        <ul>
+            <li>Access to local Map Tiles (
+                <a href="https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">Slippy Map</a>)
+            </li>
+            <li>Access to local
+                <a href="https://github.com/mapbox/mbtiles-spec">MBTiles files</a>
+            </li>
+            <li>
+                Redirect to a Tile Server with
+                <a href="https://docs.microsoft.com/en-us/bingmaps/articles/bing-maps-tile-system">
+                    QuadKey Tile schema
+                </a>
+            </li>
+        </ul>
+        <h2 id="access-to-local-map-tiles">Access to local Map Tiles</h2>
+        <p>Local Map Tiles can be accessed on address:</p>
+        <pre>
+            <code class="language-text">http://localhost:PORT/</code>
+        </pre>
+        <p>
+            Where
+            <code>PORT</code>
+            is set in application settings. In settings, you must specify a directory, where the
+            files are stored. This directory is
+            used as a root for the server. All files in that directory (including subdirectories)
+            will be accessible from the server. If you have map tiles
+            stored in your memory card on address<code>
+            /storage/emulated/0/OfflineTiles/Plovdiv/{z}_{x}_{y}.png</code>, you can set the root
+            directory to:
+            <code>/storage/emulated/0/OfflineTiles</code>. Then in order to access this map just
+            start the service and navigate to:
+        </p>
+        <pre>
+            <code class="language-text">http://localhost:1886/Plovdiv/{z}_{x}_{y}.png</code>
+        </pre>
+        <p>
+            In this case the root directory points to the parent folder (which contains
+            <code>Plovdiv</code>
+            subfolder). This way you can have multiple
+            subfolders containing different map tiles and all can be accessed through the same
+            server!
+        </p>
+        <h2 id="access-to-local-mbtiles-files">Access to local MBTiles files</h2>
+        <p>Local MBTiles Tiles can be accessed on address:</p>
+        <pre>
+            <code class="language-text">http://localhost:1886/mbtiles/?file=&amp;useTMS=&amp;z={z}&amp;x={x}&amp;y={y}</code>
+        </pre>
+        <p>
+            Where
+            <code>PORT</code>
+            is set in application settings. In settings, you must specify a directory, where the
+            files are stored. This directory is
+            used as a root for the server. All files in that directory (including subdirectories)
+            will be accessible from the server.
+        </p>
+        <p>There are several parameters, which must be provided:</p>
+        <ul>
+            <li><code>file</code>: MBTiles file (including extension)
+            </li>
+            <li><code>useTMS</code>:
+                <code>true</code>
+                if the tile coordinates are provided in XYZ schema (default is<code>true</code>)
+            </li>
+            <li><code>z</code>: map zoom level
+            </li>
+            <li><code>x</code>: x coordinate of a map tile
+            </li>
+            <li><code>y</code>: y coordinate of a map tile
+            </li>
+        </ul>
+        <p>If you have tiles stored in MBTiles format, you can place your files in the root
+            directory and access them with:
+        </p>
+        <pre>
+            <code>http://localhost:1886/mbtiles/?file=test.mbtiles&amp;z={z}&amp;x={x}&amp;y={y}
+            </code>
+        </pre>
+        <p>
+            In this case the root directory points to the parent folder (which contains
+            <code>Plovdiv</code>
+            subfolder). This way you can have multiple
+            subfolders containing different map tiles and all can be accessed through the same
+            server!
+        </p>
+        <h2 id="redirect-to-a-tile-server-with-quadkey-tile-schema">Redirect to a Tile Server with
+            QuadKey Tile schema
+        </h2>
+        <p>Redirect can be accessed on address:</p>
+        <pre>
+            <code class="language-text">http://localhost:PORT/redirect/?url=...&amp;quadkey=true&amp;x=&amp;y=&amp;z=</code>
+        </pre>
+        <p>
+            Where
+            <code>PORT</code>
+            is set in application settings. In settings, you must specify a directory, where the
+            files are stored. This directory is
+            used as a root for the server. All files in that directory (including subdirectories)
+            will be accessible from the server.
+        </p>
+        <p>There are several parameters, which must be provided:</p>
+        <ul>
+            <li><code>url</code>: url address on which to redirect
+            </li>
+            <li><code>quadkey</code>:
+                <code>true</code>
+                if the server uses QuadKey Tile schema
+            </li>
+            <li><code>z</code>: map zoom level
+            </li>
+            <li><code>x</code>: x coordinate of a map tile
+            </li>
+            <li><code>y</code>: y coordinate of a map tile
+            </li>
+        </ul>
+        <p>
+            If you want to use for example Bing Maps, which uses QuadKey Tile schema and you only
+            have XYZ tile coordinates you can use the redirect option,
+            which will calculate the quadkey value and then will redirect the request to the server.
+            For accessing Bing Maps Aerial map tiles you can
+            navigate to:
+        </p>
+        <pre>
+            <code class="language-text">
+                http://localhost:1886/redirect/?url=http://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=6201&amp;quadkey=true&amp;z={z}&amp;x={x}&amp;y={y}
+            </code>
+        </pre>
+    </body>
+</html>
