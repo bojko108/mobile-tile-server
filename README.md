@@ -26,7 +26,7 @@ http://localhost:PORT/
 ```
 
 Where `PORT` is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.
-If you have map tiles stored in your memory card on address `/storage/emulated/0/OfflineTiles/Plovdiv/{z}_{x}_{y}.png`, you can set the root directory to: `/storage/emulated/0/OfflineTiles`. Then in order to access this map just start the service and navigate to:
+If you have map tiles stored in your memory card on address `/storage/emulated/0/MobileTileServer/Plovdiv/{z}_{x}_{y}.png`, you can set the root directory to: `/storage/emulated/0/OfflineTiles`. Then in order to access this map just start the service and navigate to:
 
 ```text
 http://localhost:1886/Plovdiv/{z}_{x}_{y}.png

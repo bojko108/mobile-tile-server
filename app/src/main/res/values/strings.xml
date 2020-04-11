@@ -19,7 +19,7 @@
     <string name="help_options_1_header">Access to local Map Tiles</string>
     <string name="help_options_1_1">Local Map Tiles can be accessed on address:</string>
     <string name="help_options_1_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.</string>
-    <string name="help_options_1_example">If you have map tiles stored in \'/storage/emulated/0/OfflineTiles/Plovdiv/{z}_{x}_{y}.png\', you can set the root directory to: \'/storage/emulated/0/OfflineTiles\'. Then in order to access this map just start the service and navigate to:\n\n\'http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\'.\n\nIn this case the root directory points to the parent folder (which contains \'Plovdiv\' subfolder). This way you can have multiple subfolders containing different map tiles and all can be accessed through the same server!</string>
+    <string name="help_options_1_example">If you have map tiles stored in \'/storage/emulated/0/MobileTileServer/Plovdiv/{z}_{x}_{y}.png\', you can set the root directory to: \'/storage/emulated/0/OfflineTiles\'. Then in order to access this map just start the service and navigate to:\n\n\'http://localhost:1886/Plovdiv/{z}_{x}_{y}.png\'.\n\nIn this case the root directory points to the parent folder (which contains \'Plovdiv\' subfolder). This way you can have multiple subfolders containing different map tiles and all can be accessed through the same server!</string>
     <string name="help_options_2_header">Access to local MBTiles files</string>
     <string name="help_options_2_1">Can be found on address:</string>
     <string name="help_options_2_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.\n\nAs MBTiles use TMS schema to store map tiles, y coordinate must be transformed in order to locate the correct tile row. If your app uses XYZ tile schema, pass negative value for y (-y) as a parameter. \n\nThere are several parameters, which must be provided:\n- \'file\': MBTiles file (including extension)\n- \'z\': map zoom level\n- \'x\': x coordinate of a map tile\n- \'y\': y coordinate of a map tile</string>
@@ -37,7 +37,7 @@
     <string name="settings_server_port_default" translatable="false">1886</string>
     <string name="settings_root_path">Tiles root directory path</string>
     <string name="settings_root_path_details">Specify root directory path where the map tiles are stored</string>
-    <string name="settings_root_path_default" translatable="false">/storage/emulated/0/OfflineTiles</string>
+    <string name="settings_root_path_default" translatable="false">/storage/emulated/0/MobileTileServer</string>
     <string name="settings_status">Tile server running</string>
     <string name="settings_reset_category">Restore default settings</string>
     <string name="settings_reset">Restore</string>

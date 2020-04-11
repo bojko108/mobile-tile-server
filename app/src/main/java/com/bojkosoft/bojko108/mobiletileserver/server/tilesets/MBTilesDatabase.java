@@ -10,16 +10,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class MBTilesDatabase extends SQLiteOpenHelper {
-    public static String DATABASE_NAME = "NOT_SET_YET";
-
     private static final String GET_TILE_SQL_STRING = "SELECT \"tile_data\" FROM \"tiles\" where zoom_level = %d and tile_column=%d and tile_row=%d";
     private static final String GET_INFO_SQL_STRING = "SELECT * FROM \"metadata\"";
 
     private TilesetInfo info;
 
-    public MBTilesDatabase(Context context, @Nullable String databasename) {
-        super(context, databasename == null ? DATABASE_NAME : databasename, null, 1);
-        this.info = this.readInfo(databasename == null ? DATABASE_NAME : databasename);
+    public MBTilesDatabase(Context context, String databaseName) {
+        super(context, databaseName, null, 1);
+        this.info = this.readInfo(databaseName);
     }
 
     @Override
@@ -37,6 +35,15 @@ public class MBTilesDatabase extends SQLiteOpenHelper {
     public byte[] getTile(int z, int x, int y) {
         byte[] result = null;
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // MBTiles by default use TMS for the tiles. Most mapping apps use slippy maps: XYZ schema.
+        // We need to handle both.
+        if (y > 0) {
+            y = (int) Math.pow(2, z) - Math.abs(y) - 1;
+        } else {
+            y = Math.abs(y);
+        }
+
         String sql = String.format(Locale.getDefault(), GET_TILE_SQL_STRING, z, x, y);
 
         try (Cursor cur = db.rawQuery(sql, null)) {
