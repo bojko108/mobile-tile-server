@@ -1,9 +1,12 @@
 package com.bojkosoft.bojko108.mobiletileserver.utils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +14,8 @@ import java.util.Locale;
 import androidx.annotation.Nullable;
 
 public class HelperClass {
+    private static final String TAG = HelperClass.class.getName();
+
     /**
      * Calculates the quadkey from tile coordinates.
      *
@@ -165,6 +170,23 @@ public class HelperClass {
                 }
             }
         });
+    }
+
+    /**
+     * Creates a directory of a file at the specified absolute path
+     *
+     * @param absolutePath path to a directory or a file
+     */
+    public static void createDirectory(String absolutePath) {
+        try {
+            File directory = new File(absolutePath);
+            if (!directory.exists()) {
+                Files.createDirectories(directory.toPath());
+            }
+        } catch (IOException e) {
+            Log.i(TAG, "createDirectory: unable to create directory: " + absolutePath);
+            e.printStackTrace();
+        }
     }
 
     public static String formatException(Exception ex) {

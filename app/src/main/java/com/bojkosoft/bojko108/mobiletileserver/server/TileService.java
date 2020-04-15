@@ -26,7 +26,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * This service controls the Mobile Tile Server. Use {@link TileServiceReceiver TileServiceReceiver class}
- * for more info about interacting with this service. For more info regarding the HTTP Server go to {@link TileServer TileServer class}.
+ * for more info about interacting with this service. For more info regarding the HTTP Server go to
+ * {@link TileServer TileServer class}.
+ * </p>
  * <b>Startup parameters: </b>
  * <ul>
  * <li><b>KEY_SERVER_PATH</b> - sets the server URL address as <i>String</i></li>
@@ -47,8 +49,8 @@ public class TileService extends Service {
     public static final String ACTION_PING = "mobiletileserver.ACTION_PING";
     /**
      * Use this key to register a local receiver which will help you to determine if {@link TileService}
-     * is running. First register a local receiver with {@link IntentFilter} set to {@link TileService#ACTION_RUNNING}
-     * and then broadcast {@link TileService#ACTION_PING} action to trigger the process.
+     * is running. First register a local receiver with {@link IntentFilter} set to this action
+     * and then broadcast {@link TileService#ACTION_PING} to trigger the process.
      */
     public static final String ACTION_RUNNING = "mobiletileserver.ACTION_RUNNING";
 
@@ -130,8 +132,7 @@ public class TileService extends Service {
      * Creates a notification channel for this service
      */
     private void createNotificationChannel() {
-        String CHANNEL_ID = "com.bojkosoft.bojko108.mobiletileserver";
-        this.notificationChannel = new NotificationChannel(CHANNEL_ID, getResources().getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
+        this.notificationChannel = new NotificationChannel(TAG, getResources().getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
         this.notificationChannel.setLightColor(Color.WHITE);
         this.notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         this.notificationChannel.setSound(null, null);
@@ -188,8 +189,11 @@ public class TileService extends Service {
      *
      * @param actionType According to {@link TileServiceReceiver TileServiceReceiver class}
      * @param title      Text to use for the button
-     * @param extras     List of extra values, which will be passed to the Intent, triggered by this action, according to {@link TileServiceReceiver TileServiceReceiver class}
-     * @param flags
+     * @param extras     List of extra values, which will be passed to the Intent, triggered by this action,
+     *                   according to {@link TileServiceReceiver TileServiceReceiver class}
+     * @param flags      May be 0, {@link PendingIntent#FLAG_ONE_SHOT}, {@link PendingIntent#FLAG_NO_CREATE},
+     *                   {@link PendingIntent#FLAG_CANCEL_CURRENT}, {@link PendingIntent#FLAG_UPDATE_CURRENT},
+     *                   {@link PendingIntent#FLAG_IMMUTABLE} or any of the flags as supported by Intent.fillIn()
      * @return new notification action
      */
     private Notification.Action createAction(String actionType, String title, List<String[]> extras, int flags) {
@@ -210,6 +214,12 @@ public class TileService extends Service {
                 pendingIntentAction).build();
     }
 
+    /**
+     * This receiver is used only for broadcasting the server's running status.
+     * First broadcast {@link TileService#ACTION_PING} and if the server is running,
+     * this local broadcast will receive the message and will itself broadcast
+     * {@link TileService#ACTION_RUNNING}.
+     */
     private BroadcastReceiver localReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

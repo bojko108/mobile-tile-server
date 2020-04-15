@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mobile Tile Server</string>
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отказ</string>
     <string name="dialog_yes">Да</string>
@@ -46,4 +45,7 @@
     <string name="server_action_browse_short">Отвори</string>
     <string name="server_action_browse">Отвори файловете</string>
     <string name="server_action_navigate">Отиди до</string>
+    <string name="settings_open_settings_text"><![CDATA[Поради функциите за управление потреблението на батерията на Андроид, приложението може да не е активно докато работи на заден план. Можете да управлявате това като включите ръчните настройки за приложението Mobile Tile Server в Device Settings > Battery > App Launch:]]></string>
+    <string name="settings_open_settings_title">Работа на заден план</string>
+    <string name="settings_open_settings_button_text">Отвори настройките</string>
 </resources>

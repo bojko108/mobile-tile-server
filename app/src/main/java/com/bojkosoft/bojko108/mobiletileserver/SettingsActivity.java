@@ -1,6 +1,7 @@
 package com.bojkosoft.bojko108.mobiletileserver;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.bojkosoft.bojko108.mobiletileserver.utils.BatteryOptimization;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
@@ -30,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.preferences, rootKey);
+            findPreference(getString(R.string.settings_open_settings_button)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.settings_reset_button)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.rootpath)).setOnPreferenceClickListener(this);
 
@@ -38,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            if (preference.getKey().equals(getString(R.string.settings_reset_button))) {
+            if (getString(R.string.settings_reset_button).equals(preference.getKey())) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                 builder.setTitle("Reset preferences")
                         .setMessage(getString(R.string.restore_defaults))
@@ -56,6 +59,8 @@ public class SettingsActivity extends AppCompatActivity {
                         .create();
 
                 builder.show();
+            } else if (getString(R.string.settings_open_settings_button).equals(preference.getKey())) {
+                BatteryOptimization.openSettings(getContext());
             }
 
             return true;

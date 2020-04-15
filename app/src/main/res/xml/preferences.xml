@@ -14,6 +14,24 @@
         app:title="@string/settings_root_path" />
 
     <PreferenceCategory
+        app:key="@string/settings_category_open_settings"
+        app:selectable="false"
+        app:title="@string/settings_open_settings_title">
+        <Preference
+            app:key="@string/settings_open_settings_info"
+            app:persistent="false"
+            app:selectable="true"
+            app:summary="@string/settings_open_settings_text" />
+        />
+        <Preference
+            app:key="@string/settings_open_settings_button"
+            app:persistent="false"
+            app:selectable="true"
+            app:title="@string/settings_open_settings_button_text" />
+        />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="@string/pref_key_storage_settings"
         app:selectable="false"
         app:title="@string/settings_reset_category">

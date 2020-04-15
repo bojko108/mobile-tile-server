@@ -1,19 +1,14 @@
 package com.bojkosoft.bojko108.mobiletileserver.server;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.MBTilesDatabase;
 import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
 import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
 import com.koushikdutta.async.AsyncServer;
-import com.koushikdutta.async.callback.CompletedCallback;
-import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.Multimap;
 import com.koushikdutta.async.http.server.AsyncHttpServer;
-import com.koushikdutta.async.http.server.AsyncHttpServerRequest;
-import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
 import com.koushikdutta.async.http.server.HttpServerRequestCallback;
 
 import org.json.JSONArray;
@@ -27,7 +22,16 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * This is the main class, responsible for managing GET requests to the tile server.
+ * This is the main class, responsible for managing GET requests to the tile server. The class
+ * uses {@link AsyncHttpServer} as a HTTP Server and registers following HTTP routes:
+ * <ul>
+ *     <li><i>/</i> - home address, which returns information about how to use this tile server</li>
+ *     <li><i>/preview/mbtiles</i> - address on which you can preview a specific MBTiles Tileset</li>
+ *     <li><i>/preview/tiles</i> - address on which you can preview a specific Directory Tileset</li>
+ *     <li><i>/mbtiles</i> - address on which you can access a specific MBTiles Tileset</li>
+ *     <li><i>/tiles</i> - address on which you can access a specific Directory Tileset</li>
+ *     <li><i>/availabletilesets</i> - address on which you can get all available tilesets in JSON format</li>
+ * </ul>
  * <p>
  * Mobile Tile Server, Copyright (c) 2020 by bojko108
  * <p/>
@@ -83,24 +87,6 @@ class TileServer {
 
     private AsyncServer server;
     private AsyncHttpServer httpServer;
-    private final Handler pingServer = new Handler();
-    private final int pingInterval = 30000;
-    private final Runnable pingServerAction = new Runnable() {
-        @Override
-        public void run() {
-            Log.i(TAG, "Ping Server Action");
-
-            try {
-                if (server != null && server.isRunning()) {
-                    AsyncHttpClient.getDefaultInstance().execute("http://localhost:1886", null);
-                    pingServer.postDelayed(pingServerAction, pingInterval);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                pingServer.removeCallbacks(pingServerAction);
-            }
-        }
-    };
 
     private String rootPath;
     private int port;
@@ -126,21 +112,19 @@ class TileServer {
         this.createRootDirectoryIfDoesNotExist();
     }
 
+    /**
+     * Creates all needed files and directories if does not exist. The path to the directory
+     * is set in app settings.
+     */
     private void createRootDirectoryIfDoesNotExist() {
-        try {
-            File directory = new File(this.rootPath);
-            if (!directory.exists()) {
-                Files.createDirectories(directory.toPath());
-            }
-            // create a dummy file so the photo gallery doesn't read the map tiles
-            File noMediaFile = new File(this.rootPath + "/.nomedia");
-            if (!noMediaFile.exists()) {
-                Files.createFile(noMediaFile.toPath());
-            }
-        } catch (IOException e) {
-            Log.i(TAG, "createRootDirectoryIfDoesNotExist: unable to create directory: ");
-            e.printStackTrace();
-        }
+        // creates root directory if it does not exist
+        HelperClass.createDirectory(this.rootPath);
+        // create a dummy file so the photo gallery doesn't read the map tiles
+        HelperClass.createDirectory(this.rootPath + "/.nomedia");
+        // create MBTiles Tilesets root directory
+        HelperClass.createDirectory(this.rootPath + URL_MBTILES);
+        // create Directory Tilesets root directory
+        HelperClass.createDirectory(this.rootPath + URL_TILES);
     }
 
     /**
@@ -156,7 +140,7 @@ class TileServer {
             this.httpServer.get(URL_PREVIEW_MBTILES, this.previewMBTilesPageCallback);
             this.httpServer.get(URL_PREVIEW_TILES, this.previewTilesPageCallback);
             this.httpServer.get(URL_MBTILES, this.getMBTileCallback);
-            this.httpServer.get(URL_TILES, this.getAvailableDirectoryTyles);
+            this.httpServer.get(URL_TILES, this.getAvailableDirectoryTiles);
             this.httpServer.get(URL_TILES + ".*", this.getTileCallback);
             this.httpServer.get(URL_AVAILABLE_TILESETS, this.getAvailableTilesetsAsJson);
 
@@ -166,10 +150,6 @@ class TileServer {
             this.httpServer.listen(this.server, this.port);
 
             ServerFiles.setServerUrlAddress(this.getHomeAddress());
-
-            this.pingServer.postDelayed(this.pingServerAction, pingInterval);
-
-            Log.i(TAG, String.format("Ping Action add for each: %d seconds", this.pingInterval / 1000));
 
             Log.i(TAG, "TileServer started");
         } catch (Exception ex) {
@@ -183,10 +163,6 @@ class TileServer {
     void stop() {
         this.httpServer.stop();
         this.server.stop();
-
-        this.pingServer.removeCallbacks(this.pingServerAction);
-        Log.i(TAG, "Ping Action removed");
-
         Log.i(TAG, "TileServer stopped");
     }
 
@@ -391,7 +367,7 @@ class TileServer {
      */
     private byte[] returnTile(byte[] data) {
         if (data == null || data.length == 0) {
-            data = ServerFiles.NO_TILE_IMAGE; // TODO: clone???
+            data = ServerFiles.NO_TILE_IMAGE;
         }
         return data;
     }
@@ -399,143 +375,131 @@ class TileServer {
     /**
      * @see <a href="http://192.168.100.7:1886/">Go to server's home page</a>
      */
-    private final HttpServerRequestCallback homePageCallback = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            String html = ServerFiles.getHomePageHtml();
-            response.send(html);
-        }
+    private final HttpServerRequestCallback homePageCallback = (request, response) -> {
+        String html = ServerFiles.getHomePageHtml();
+        response.send(html);
     };
 
     /**
-     * @see <a href="http://192.168.100.7:1886/preview/mbtiles?tileset=defaulta.mbtiles">Preview a MBTiles Tileset</a>
+     * @see <a href="http://192.168.100.7:1886/preview/mbtiles?tileset=glavatar-kaleto-M5000-zoom1_17.mbtiles">Preview a MBTiles Tileset</a>
      */
-    private final HttpServerRequestCallback previewMBTilesPageCallback = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            Multimap parameters = request.getQuery();
-            int responseCode = 200;
-            String responseData = "";
+    private final HttpServerRequestCallback previewMBTilesPageCallback = (request, response) -> {
+        Multimap parameters = request.getQuery();
+        int responseCode = 200;
+        String responseData;
 
-            try {
-                if (parameters.isEmpty()) {
+        try {
+            if (parameters.isEmpty()) {
+                responseCode = 400;
+                responseData = "'tileset' is required URL parameter but was not provided";
+            } else {
+                String tilesetName = parameters.getString(PARAMETER_TILESET);
+                if (tilesetName == null) {
                     responseCode = 400;
                     responseData = "'tileset' is required URL parameter but was not provided";
                 } else {
-                    String tilesetName = parameters.getString(PARAMETER_TILESET);
-                    if (tilesetName == null) {
+                    TilesetInfo tilesetInfo = getMBTilesInfoFor(tilesetName);
+                    if (tilesetInfo == null) {
                         responseCode = 400;
-                        responseData = "'tileset' is required URL parameter but was not provided";
+                        responseData = "Tileset with name '" + tilesetName + "' is not available. Check the name of the tileset and try again.";
                     } else {
-                        TilesetInfo tilesetInfo = getMBTilesInfoFor(tilesetName);
-                        if (tilesetInfo == null) {
-                            responseCode = 400;
-                            responseData = "Tileset with name '" + tilesetName + "' is not available. Check the name of the tileset and try again.";
-                        } else {
-                            // return the preview page at last
-                            responseData = ServerFiles.getMBTilesPreviewPageHtmlFor(tilesetInfo);
-                        }
+                        // return the preview page at last
+                        responseData = ServerFiles.getMBTilesPreviewPageHtmlFor(tilesetInfo);
                     }
                 }
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
             }
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
 
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
-            } else if (responseCode == 400) {
-                response.send(ServerFiles.getBadRequestPage(responseData));
-            } else {
-                response.send(responseData);
-            }
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else if (responseCode == 400) {
+            response.send(ServerFiles.getBadRequestPage(responseData));
+        } else {
+            response.send(responseData);
         }
     };
 
     /**
      * @see <a href="http://192.168.100.7:1886/preview/tiles?tileset=default">Preview a Directory Tileset</a>
      */
-    private final HttpServerRequestCallback previewTilesPageCallback = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            Multimap parameters = request.getQuery();
-            int responseCode = 200;
-            String responseData = "";
+    private final HttpServerRequestCallback previewTilesPageCallback = (request, response) -> {
+        Multimap parameters = request.getQuery();
+        int responseCode = 200;
+        String responseData;
 
-            try {
-                if (parameters.isEmpty()) {
+        try {
+            if (parameters.isEmpty()) {
+                responseCode = 400;
+                responseData = "'tileset' is required URL parameter but was not provided";
+            } else {
+                String tilesetName = parameters.getString(PARAMETER_TILESET);
+                if (tilesetName == null) {
                     responseCode = 400;
                     responseData = "'tileset' is required URL parameter but was not provided";
                 } else {
-                    String tilesetName = parameters.getString(PARAMETER_TILESET);
-                    if (tilesetName == null) {
-                        responseCode = 400;
-                        responseData = "'tileset' is required URL parameter but was not provided";
+                    File file = new File(getPathToDirectoryTileset(tilesetName));
+                    if (file.exists() && file.isDirectory()) {
+                        TilesetInfo tilesetInfo = new TilesetInfo(file);
+                        responseData = ServerFiles.getDirectoryTilesPreviewPageHtmlFor(tilesetInfo);
                     } else {
-                        File file = new File(getPathToDirectoryTileset(tilesetName));
-                        if (file.exists() && file.isDirectory()) {
-                            TilesetInfo tilesetInfo = new TilesetInfo(file);
-                            responseData = ServerFiles.getDirectoryTilesPreviewPageHtmlFor(tilesetInfo);
-                        } else {
-                            responseCode = 400;
-                            responseData = "Tileset with name '" + tilesetName + "' is not available. Check the name of the tileset and try again.";
-                        }
+                        responseCode = 400;
+                        responseData = "Tileset with name '" + tilesetName + "' is not available. Check the name of the tileset and try again.";
                     }
                 }
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
             }
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
 
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
-            } else if (responseCode == 400) {
-                response.send(ServerFiles.getBadRequestPage(responseData));
-            } else {
-                response.send(responseData);
-            }
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else if (responseCode == 400) {
+            response.send(ServerFiles.getBadRequestPage(responseData));
+        } else {
+            response.send(responseData);
         }
     };
 
     /**
      * @see <a href="http://192.168.100.7:1886/mbtiles">Go to available MBTiles Tilesets</a>
-     * @see <a href="http://192.168.100.7:1886/mbtiles?tileset=defaulta.mbtiles&z=14&x=9323&y=6061">Get an example of MBTiles Tile</a>
+     * @see <a href="http://192.168.100.7:1886/mbtiles?tileset=glavatar-kaleto-M5000-zoom1_17.mbtiles&z=14&x=9323&y=6061">Get an example of MBTiles Tile</a>
      */
-    private final HttpServerRequestCallback getMBTileCallback = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            Multimap parameters = request.getQuery();
-            int responseCode = 200;
-            String responseData = "";
-            byte[] responseDataArray = null;
+    private final HttpServerRequestCallback getMBTileCallback = (request, response) -> {
+        Multimap parameters = request.getQuery();
+        int responseCode = 200;
+        String responseData = "";
+        byte[] responseDataArray = null;
 
-            try {
-                if (parameters.isEmpty()) {
-                    // send a list of available MBTiles tilesets
-                    List<TilesetInfo> tilesets = getInfoForAllMBTilesTilesets();
-                    responseData = ServerFiles.getAvailableMBTilesPageHtmlFor(tilesets);
-                } else {
-                    responseDataArray = returnTile(getTileFromMBTilesFile(parameters));
-                }
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
-            }
-
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        try {
+            if (parameters.isEmpty()) {
+                // send a list of available MBTiles tilesets
+                List<TilesetInfo> tilesets = getInfoForAllMBTilesTilesets();
+                responseData = ServerFiles.getAvailableMBTilesPageHtmlFor(tilesets);
             } else {
-                if (responseDataArray != null) {
-                    response.send("image/png", responseDataArray);
-                } else {
-                    response.send(responseData);
-                }
+                responseDataArray = returnTile(getTileFromMBTilesFile(parameters));
+            }
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
+
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else {
+            if (responseDataArray != null) {
+                response.send("image/png", responseDataArray);
+            } else {
+                response.send(responseData);
             }
         }
     };
@@ -543,25 +507,50 @@ class TileServer {
     /**
      * @see <a href="http://192.168.100.7:1886/tiles">Go to available Directory Tilesets</a>
      */
-    private final HttpServerRequestCallback getAvailableDirectoryTyles = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            int responseCode = 200;
-            String responseData = "";
+    private final HttpServerRequestCallback getAvailableDirectoryTiles = (request, response) -> {
+        int responseCode = 200;
+        String responseData;
 
-            try {
-                // send a list of available Directory tilesets
-                List<TilesetInfo> tilesets = getInfoForAllDirectoryTilesets();
-                responseData = ServerFiles.getAvailableDirectoryTilesPageHtmlFor(tilesets);
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
-            }
+        try {
+            // send a list of available Directory tilesets
+            List<TilesetInfo> tilesets = getInfoForAllDirectoryTilesets();
+            responseData = ServerFiles.getAvailableDirectoryTilesPageHtmlFor(tilesets);
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
 
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else {
+            response.send(responseData);
+        }
+    };
+
+    /**
+     * @see <a href="http://192.168.100.7:1886/tiles/default/10/582/378.png">Get an example of Directory Tile</a>
+     */
+    private final HttpServerRequestCallback getTileCallback = (request, response) -> {
+        int responseCode = 200;
+        String responseData = "";
+        byte[] responseDataArray = null;
+
+        try {
+            responseDataArray = returnTile(request.getPath());
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
+
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else {
+            if (responseDataArray != null) {
+                response.send("image/png", responseDataArray);
             } else {
                 response.send(responseData);
             }
@@ -569,81 +558,46 @@ class TileServer {
     };
 
     /**
-     * @see <a href="http://192.168.100.7:1886/tiles/default/10/582/378.png">Get an example of Directory Tile</a>
-     */
-    private final HttpServerRequestCallback getTileCallback = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            int responseCode = 200;
-            String responseData = "";
-            byte[] responseDataArray = null;
-
-            try {
-                responseDataArray = returnTile(request.getPath());
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
-            }
-
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
-            } else {
-                if (responseDataArray != null) {
-                    response.send("image/png", responseDataArray);
-                } else {
-                    response.send(responseData);
-                }
-            }
-        }
-    };
-
-    /**
      * @see <a href="http://192.168.100.7:1886/availabletiles">Go to available Tilesets as JSON</a>
      */
-    private final HttpServerRequestCallback getAvailableTilesetsAsJson = new HttpServerRequestCallback() {
-        @Override
-        public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
-            int responseCode = 200;
-            String responseData = "";
-            JSONArray result = new JSONArray();
+    private final HttpServerRequestCallback getAvailableTilesetsAsJson = (request, response) -> {
+        int responseCode = 200;
+        String responseData = "";
+        JSONArray result = new JSONArray();
 
-            try {
-                // get all available directory tilesets
-                List<TilesetInfo> tilesets = getInfoForAllMBTilesTilesets();
-                for (int i = 0; i < tilesets.size(); i++) {
-                    TilesetInfo info = tilesets.get(i);
-                    JSONObject infoJson = info.toJson();
-                    String url = ServerFiles.getUrlAddressFor(info, ServerFiles.TilesetType.MBTiles);
-                    infoJson.put("url", url);
-                    result.put(i, infoJson);
-                }
-
-                int tmp = result.length();
-                // get all available mbtiles tilesets
-                tilesets.clear();
-                tilesets = getInfoForAllDirectoryTilesets();
-                for (int i = 0; i < tilesets.size(); i++, tmp++) {
-                    TilesetInfo info = tilesets.get(i);
-                    JSONObject infoJson = info.toJson();
-                    String url = ServerFiles.getUrlAddressFor(info, ServerFiles.TilesetType.DirectoryTiles);
-                    infoJson.put("url", url);
-                    result.put(tmp, infoJson);
-                }
-            } catch (Exception ex) {
-                responseCode = 500;
-                responseData = HelperClass.formatException(ex);
+        try {
+            // get all available directory tilesets
+            List<TilesetInfo> tilesets = getInfoForAllMBTilesTilesets();
+            for (int i = 0; i < tilesets.size(); i++) {
+                TilesetInfo info = tilesets.get(i);
+                JSONObject infoJson = info.toJson();
+                String url = ServerFiles.getUrlAddressFor(info, ServerFiles.TilesetType.MBTiles);
+                infoJson.put("url", url);
+                result.put(i, infoJson);
             }
 
-            // add pages for Bad Request and Internal Server Error
-            response.code(responseCode);
-            if (responseCode == 500) {
-                response.send(ServerFiles.getInternalServerErrorPage(responseData));
-            } else {
-                response.send(result);
+            int tmp = result.length();
+            // get all available mbtiles tilesets
+            tilesets.clear();
+            tilesets = getInfoForAllDirectoryTilesets();
+            for (int i = 0; i < tilesets.size(); i++, tmp++) {
+                TilesetInfo info = tilesets.get(i);
+                JSONObject infoJson = info.toJson();
+                String url = ServerFiles.getUrlAddressFor(info, ServerFiles.TilesetType.DirectoryTiles);
+                infoJson.put("url", url);
+                result.put(tmp, infoJson);
             }
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
+
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else {
+            response.send(result);
         }
     };
 }
-
