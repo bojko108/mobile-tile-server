@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.bojkosoft.bojko108.mobiletileserver"
@@ -34,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.koushikdutta.async:androidasync:3.0.8'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

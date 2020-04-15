@@ -2,12 +2,14 @@ package com.bojkosoft.bojko108.mobiletileserver.server.tilesets;
 
 import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 /**
  * This class provides access to various parameters for the tileset stored in
  * a MBTiles Database {@link MBTilesDatabase} or a directory with map tiles files.
- *
  * <b>Provided parameters from the tileset include: </b>
  * <ul>
  * <li><b>NAME</b> - tileset name - for MBTiles file it gives the name of the file,
@@ -19,6 +21,8 @@ import java.io.File;
  * <li><b>BOUNDS</b> - tileset extent in geographic coordinates</li>
  * <li><b>CENTER</b> - tileset center in geographic coordinates</li>
  * </ul>
+ * <p>
+ * Mobile Tile Server, Copyright (c) 2020 by bojko108
  * <p/>
  */
 public class TilesetInfo {
@@ -191,6 +195,28 @@ public class TilesetInfo {
      */
     public String getCenterAsString() {
         return HelperClass.arrayToString(this.getCenter(), ",");
+    }
+
+    /**
+     * Returns this tileset info as JSON object.
+     *
+     * @return tileset info parameters in JSON
+     */
+    public JSONObject toJson() {
+        JSONObject result = new JSONObject();
+        try {
+            result.put(TILESET_NAME, this.tilesetName);
+            result.put(NAME, this.name);
+            result.put(DESCRIPTION, this.description);
+            result.put(VERSION, this.version);
+            result.put(MIN_ZOOM, this.minZoom);
+            result.put(MAX_ZOOM, this.maxZoom);
+            result.put(BOUNDS, this.getBoundsAsString());
+            result.put("center", this.getCenterAsString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**

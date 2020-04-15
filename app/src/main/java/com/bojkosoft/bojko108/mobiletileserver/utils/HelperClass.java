@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.Nullable;
 
@@ -164,5 +165,14 @@ public class HelperClass {
                 }
             }
         });
+    }
+
+    public static String formatException(Exception ex) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%s\n", ex.toString()));
+        for (StackTraceElement ste : ex.getStackTrace()) {
+            sb.append(String.format(Locale.getDefault(), "   at %s(%s:%d)\n", ste.getMethodName(), ste.getClassName(), ste.getLineNumber()));
+        }
+        return sb.toString();
     }
 }

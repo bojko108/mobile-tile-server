@@ -22,16 +22,18 @@
       <div class="rTableCell">{{center}} (unable to calculate, default value is returned)</div>
   </div>
   <div class="rTableRow">
-    <div class="rTableCell">For use in OruxMaps App</div>
-    <div class="rTableCell">
-        <span>Add this to the app configuration file stored in:<br/>
+        <div class="rTableCell">For use in <a href="https://github.com/bojko108/mobile-geodesy">Mobile Geodesy</a></div>
+        <div class="rTableCell">
+            <span>Tilesets are automatically added to Mobile Geodesy App. Just start the tile server, open Mobile Geodesy and choose desired tileset to load it as a basemap.</span>
+        </div>
+  </div>
+  <div class="rTableRow">
+    <div class="rTableCell">For use in <a href="https://www.oruxmaps.com/cs/en/">OruxMaps</a></div>
+        <div class="rTableCell">
+        <span>Add this to OruxMaps App configuration file stored in:<br/>
         <span><i>/storage/emulated/0/oruxmaps/mapfiles/onlinemapsources.xml</i></span><br/>
         <span>Do not forget to set the correct <i>uid</i> value in the xml!</span><br/>
-        <pre class="code">
-            <code class="language-xml">
-                <xmp>{{oruxmaps}}</xmp>
-            </code>
-        </pre>
+        <pre class="code"><code class="language-xml"><xmp>{{oruxmaps}}</xmp></code></pre>
     </div>
   </div>
 </div>

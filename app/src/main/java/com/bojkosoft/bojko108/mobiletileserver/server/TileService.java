@@ -19,7 +19,6 @@ import com.bojkosoft.bojko108.mobiletileserver.R;
 
 import androidx.annotation.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +27,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 /**
  * This service controls the Mobile Tile Server. Use {@link TileServiceReceiver TileServiceReceiver class}
  * for more info about interacting with this service. For more info regarding the HTTP Server go to {@link TileServer TileServer class}.
- * <p>
- * Mobile Tile Server, Copyright (c) 2020 by bojko108
- * <p/>
  * <b>Startup parameters: </b>
  * <ul>
  * <li><b>KEY_SERVER_PATH</b> - sets the server URL address as <i>String</i></li>
  * <li><b>KEY_SERVER_PORT</b> - sets the server's listening port</li>
  * <li><b>KEY_ROOT_PATH</b> - sets the root directory, served by the server</li>
- * <li><b>KEY_NO_TILE_IMAGE</b> - opens the Server home page WebBrowser</li>
  * </ul>
+ * <p>
+ * Mobile Tile Server, Copyright (c) 2020 by bojko108
  * <p/>
  */
 public class TileService extends Service {
@@ -67,10 +64,6 @@ public class TileService extends Service {
      * Use this key to set the server root directory path as <i>String</i>
      */
     public static final String KEY_ROOT_PATH = "KEY_ROOT_PATH";
-    /**
-     * Use this key to set no_tile_data as <i>byte[]</i>
-     */
-    public static final String KEY_NO_TILE_IMAGE = "KEY_NO_TILE_IMAGE";
 
     /**
      * NotificationChannel used by this Service
@@ -103,16 +96,15 @@ public class TileService extends Service {
             LocalBroadcastManager.getInstance(this).registerReceiver(this.localReceiver, new IntentFilter(ACTION_PING));
 
             if (this.server == null) {
-                int port = intent.getIntExtra(KEY_SERVER_PORT, 9999);
                 String rootPath = intent.getStringExtra(KEY_ROOT_PATH);
-                byte[] noTileData = intent.getByteArrayExtra(KEY_NO_TILE_IMAGE);
+                int port = intent.getIntExtra(KEY_SERVER_PORT, 9999);
 
-                this.server = new TileServer(port, rootPath, noTileData, getApplicationContext());
-                this.server.start();
+                this.server = new TileServer(rootPath, getApplicationContext());
+                this.server.start(port);
 
                 startForeground(1, this.createNotification());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "onStartCommand throws: ", e);
         }
 
@@ -123,30 +115,15 @@ public class TileService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        Log.i(TAG, "onDestroy");
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(this.localReceiver);
 
         if (this.server != null) {
             this.server.stop();
-            Log.i(TAG, "TileServer: stopped");
         }
 
-        Log.i(TAG, "onDestroy");
-
         stopForeground(true);
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-
-        Log.i(TAG, "onTaskRemoved");
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-
-        Log.i(TAG, "onTrimMemory: " + level);
     }
 
     /**
@@ -180,17 +157,17 @@ public class TileService extends Service {
                 .getActivity(this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action stopAction = this.createAction(
-                TileServiceReceiver.ACTION_STOP, getResources().getString(R.string.server_action_stop_short), null, 1, 0);
+                TileServiceReceiver.ACTION_STOP, getResources().getString(R.string.server_action_stop_short), null, 0);
 
         List<String[]> extras = new ArrayList<>();
-        extras.add(new String[]{KEY_ROOT_PATH, this.server.getRootPath()});
+        extras.add(new String[]{KEY_ROOT_PATH, this.server.getRootDirectoryPath()});
         Notification.Action browseRootAction = this.createAction(
-                TileServiceReceiver.ACTION_OPEN_ROOT_PATH, getResources().getString(R.string.server_action_browse_short), extras, 2, 0);
+                TileServiceReceiver.ACTION_OPEN_ROOT_PATH, getResources().getString(R.string.server_action_browse_short), extras, 0);
 
         extras.clear();
-        extras.add(new String[]{KEY_SERVER_PATH, this.server.getUrlAddress()});
+        extras.add(new String[]{KEY_SERVER_PATH, this.server.getHomeAddress()});
         Notification.Action navigateAction = this.createAction(
-                TileServiceReceiver.ACTION_NAVIGATE_TO_SERVER, getResources().getString(R.string.server_action_navigate_short), extras, 3, PendingIntent.FLAG_UPDATE_CURRENT);
+                TileServiceReceiver.ACTION_NAVIGATE_TO_SERVER, getResources().getString(R.string.server_action_navigate_short), extras, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder builder = new Notification.Builder(this, this.notificationChannel.getId())
                 .setOngoing(true)
@@ -209,14 +186,13 @@ public class TileService extends Service {
     /**
      * Creates new notification action
      *
-     * @param actionType  According to {@link TileServiceReceiver TileServiceReceiver class}
-     * @param title       Text to use for the button
-     * @param extras      List of extra values, which will be passed to the Intent, triggered by this action, according to {@link TileServiceReceiver TileServiceReceiver class}
-     * @param requestCode
+     * @param actionType According to {@link TileServiceReceiver TileServiceReceiver class}
+     * @param title      Text to use for the button
+     * @param extras     List of extra values, which will be passed to the Intent, triggered by this action, according to {@link TileServiceReceiver TileServiceReceiver class}
      * @param flags
      * @return new notification action
      */
-    private Notification.Action createAction(String actionType, String title, List<String[]> extras, int requestCode, int flags) {
+    private Notification.Action createAction(String actionType, String title, List<String[]> extras, int flags) {
         Intent actionIntent = new Intent(this, TileServiceReceiver.class);
         actionIntent.setAction(actionType);
         if (extras != null) {
@@ -224,9 +200,9 @@ public class TileService extends Service {
                 actionIntent.putExtra(data[0], data[1]);
             }
         }
-
+        int uniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
         PendingIntent pendingIntentAction = PendingIntent
-                .getBroadcast(this, requestCode, actionIntent, flags);
+                .getBroadcast(this, uniqueId, actionIntent, flags);
 
         return new Notification.Action.Builder(
                 Icon.createWithResource(this, R.drawable.ic_stat_name),

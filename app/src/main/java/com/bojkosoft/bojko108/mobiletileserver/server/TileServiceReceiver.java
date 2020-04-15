@@ -8,17 +8,17 @@ import android.widget.Toast;
 
 /**
  * This class receives action requests for the TileService class
- * <p/>Mobile Tile Server, Copyright (c) 2020 by bojko108</p>
- * <p/>
+ *
  * <b>Available Actions:</b>
  * <ul>
  * <li><b>ACTION_STOP</b> - stops the server</li>
  * <li><b>ACTION_OPEN_ROOT_PATH</b> - opens the root directory in FileExplorer</li>
  * <li><b>ACTION_NAVIGATE_TO_SERVER</b> - opens the Server home page WebBrowser</li>
  * </ul>
- * <p/>
  *
  * @see TileService TileServer class
+ * <p>
+ * Mobile Tile Server, Copyright (c) 2020 by bojko108
  * <p/>
  */
 public class TileServiceReceiver extends BroadcastReceiver {
