@@ -1,9 +1,11 @@
 package com.bojkosoft.bojko108.mobiletileserver.server;
 
 import android.content.Context;
+import android.os.FileUtils;
 import android.util.Log;
 
 import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.MBTilesDatabase;
+import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
 import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
 import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
 import com.koushikdutta.async.AsyncServer;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +34,8 @@ import java.util.Locale;
  *     <li><i>/mbtiles</i> - address on which you can access a specific MBTiles Tileset</li>
  *     <li><i>/tiles</i> - address on which you can access a specific Directory Tileset</li>
  *     <li><i>/availabletilesets</i> - address on which you can get all available tilesets in JSON format</li>
+ *     <li><i>/static</i> - address on which you can access static files</li>
+ *     <li><i>/liststaticfiles</i> - lists all static files served by the server</li>
  * </ul>
  * <p>
  * Mobile Tile Server, Copyright (c) 2020 by bojko108
@@ -69,9 +74,18 @@ class TileServer {
      */
     private static final String URL_AVAILABLE_TILESETS = "/availabletilesets";
     /**
+     * Represents the address of the Static Files operation, relative to the home page
+     */
+    private static final String URL_STATIC_FILES = "/static";
+    /**
      * Represents the tileset parameter, used to set the MBTiles file in MBTiles operation
      */
     private static final String PARAMETER_TILESET = "tileset";
+    /**
+     * Represents the filename parameter, used to set the static file
+     */
+    private static final String PARAMETER_STATICFILE = "filename";
+
     /**
      * Represents the z coordinate of a tile
      */
@@ -125,6 +139,8 @@ class TileServer {
         HelperClass.createDirectory(this.rootPath + URL_MBTILES);
         // create Directory Tilesets root directory
         HelperClass.createDirectory(this.rootPath + URL_TILES);
+        // create Static Files root directory
+        HelperClass.createDirectory(this.rootPath + URL_STATIC_FILES);
     }
 
     /**
@@ -143,6 +159,7 @@ class TileServer {
             this.httpServer.get(URL_TILES, this.getAvailableDirectoryTiles);
             this.httpServer.get(URL_TILES + ".*", this.getTileCallback);
             this.httpServer.get(URL_AVAILABLE_TILESETS, this.getAvailableTilesetsAsJson);
+            this.httpServer.get(URL_STATIC_FILES, this.getStaticFile);
 
             this.port = port;
 
@@ -195,6 +212,22 @@ class TileServer {
             tilesetName += ".mbtiles";
         }
         return this.getRootDirectoryPath() + URL_MBTILES + "/" + tilesetName;
+    }
+
+    /**
+     * Gets the full path to a static file
+     *
+     * @param filePath path to the static file, relative to the '/static' directory
+     * @return full path to a static file
+     */
+    private String getPathToStaticFile(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        if (filePath.equals(URL_STATIC_FILES)) {
+            return null;
+        }
+        return this.getRootDirectoryPath() + URL_STATIC_FILES + "/" + filePath;
     }
 
     /**
@@ -316,6 +349,25 @@ class TileServer {
         return result;
     }
 
+    private List<StaticFileInfo> getInfoForAllStaticFiles() {
+        List<StaticFileInfo> result = new ArrayList<>();
+
+        try {
+            File directory = new File(this.rootPath + URL_STATIC_FILES);
+            if (directory.exists() && directory.isDirectory()) {
+                File[] files = HelperClass.getFilesFrom(directory, null);
+                for (File file : files) {
+                    StaticFileInfo info = new StaticFileInfo(file);
+                    result.add(info);
+                }
+            }
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
     /**
      * Gets the information for all available directories with tilesets, served by the server.
      * Tiles are located in {@link TileServer#URL_TILES}.
@@ -349,8 +401,8 @@ class TileServer {
     private byte[] returnTile(String path) {
         byte[] data = null;
         try {
-            File file = new File(this.getRootDirectoryPath() + path);
-            if (file.exists() && !file.isDirectory()) {
+            File file = HelperClass.getFileFromPath(this.getRootDirectoryPath() + path);
+            if (file != null && file.exists() && !file.isDirectory()) {
                 data = Files.readAllBytes(file.toPath());
             }
         } catch (IOException e) {
@@ -598,6 +650,57 @@ class TileServer {
             response.send(ServerFiles.getInternalServerErrorPage(responseData));
         } else {
             response.send(result);
+        }
+    };
+
+    /**
+     * @see <a href="http://192.168.100.7:1886/static?file=cez.json">Get a static file</a>
+     */
+    private final HttpServerRequestCallback getStaticFile = (request, response) -> {
+        Multimap parameters = request.getQuery();
+        int responseCode = 200;
+        String responseData = "";
+        byte[] responseDataArray = null;
+//        String contentType = null;
+        File file = null;
+
+        try {
+            if (parameters.isEmpty()) {
+                // send a list of all static files
+                List<StaticFileInfo> staticFiles = getInfoForAllStaticFiles();
+                responseData = ServerFiles.getAvailableStaticFilesPageHtmlFor(staticFiles);
+            } else {
+                String fileName = parameters.getString(PARAMETER_STATICFILE);
+                String pathToFile = this.getPathToStaticFile(fileName);
+
+                file = HelperClass.getFileFromPath(pathToFile);
+//                if (file != null) {
+//                    contentType = HelperClass.getContentTypeForFile(file);
+//                    responseDataArray = Files.readAllBytes(file.toPath());
+//                }
+            }
+        } catch (Exception ex) {
+            responseCode = 500;
+            responseData = HelperClass.formatException(ex);
+        }
+
+        // add pages for Bad Request and Internal Server Error
+        response.code(responseCode);
+        if (responseCode == 500) {
+            response.send(ServerFiles.getInternalServerErrorPage(responseData));
+        } else {
+            if (file == null) {
+                response.send(responseData);
+            } else {
+                response.sendFile(file);
+            }
+
+//            if (responseDataArray != null) {
+//                response.sendFile(file);
+//                //response.send(contentType, responseDataArray);
+//            } else {
+//                response.send(responseData);
+//            }
         }
     };
 }

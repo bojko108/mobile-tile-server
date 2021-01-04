@@ -2,6 +2,7 @@ package com.bojkosoft.bojko108.mobiletileserver.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -170,6 +171,41 @@ public class HelperClass {
                 }
             }
         });
+    }
+
+    /**
+     * Returns the file from the specified path.
+     *
+     * @param path Full file path
+     * @return File
+     */
+    public static File getFileFromPath(String path) {
+        File file = new File(path);
+        if (file.exists() && !file.isDirectory()) {
+            return file;
+        }
+        return null;
+    }
+
+    /**
+     * Returns the MIME type for specified File. Default result is "application/octet-stream"
+     *
+     * @param file to process
+     * @return MIME type
+     */
+    public static String getContentTypeForFile(File file) {
+        String extension = file != null
+                ? MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath())
+                : "";
+
+//        if (extension == null || extension.equals("")) {
+//            return "application/octet-stream";
+//        }
+
+        String contentType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        return contentType != null
+                ? contentType
+                : "application/octet-stream";
     }
 
     /**

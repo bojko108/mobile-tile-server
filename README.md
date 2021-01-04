@@ -5,7 +5,7 @@ Mobile Tile Server is a local HTTP server, serving Map Tiles from the device sto
 - Map Tiles stored in directories - [Slippy Maps](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames)
 - Map Tiles stored in MBTiles files - [MBTiles files](https://github.com/mapbox/mbtiles-spec)
 
-Simmilar map tiles server is available for Windows (with NodeJS) - (Windows Tile Server)[https://github.com/bojko108/windows-tile-server].
+Simmilar map tiles server is available for Windows (with NodeJS) - [Windows Tile Server](https://github.com/bojko108/windows-tile-server).
 
 ## Contents
 
@@ -39,6 +39,8 @@ The map tiles must be stored in device storage and the app should have access to
 - `http://localhost:{port}/tiles` - list all available Directory tilesets, served by the server
 - `http://localhost:{port}/tiles/{tileset}/{z}/{x}/{y}.png` - returns a map tile from a Directory tileset, where `tileset` query parameters sets the name of the directory; `z`, `x` and `y` represents [tile coordinates](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames).
 - `http://localhost:{port}/availabletilesets` - returns all available tilesets in JSON format - check the example use with [Mobile Geodesy App](#mobile-geodesy-app) for more details.
+- `http://localhost:{port}/static` - returns all available static files for download
+- `http://localhost:{port}/static?filename={file_name}` - gets the specified static file
 
 ## Directory Tilesets
 
@@ -164,6 +166,44 @@ This will return a list of all available MBTiles Tilesets, served from this serv
 > | For use in Mobile Geodesy | Tilesets are automatically added to Mobile Geodesy App. Just start the tile server, open Mobile Geodesy and choose desired tileset to load it as a basemap. |
 > | For use in OruxMaps       | XML text to be added to OruxMaps App configuration file stored in: _/storage/emulated/0/oruxmaps/mapfiles/onlinemapsources.xml_                             |
 
+## Static files
+
+Returns a list of all static files served by this server. This is an example file structure of the root directory:
+
+```
+
+📦MobileTileServer                                --> server root directory
+┣ 📂static
+┃ ┣ 📜cez.json                                    --> static file
+┃ ┣ 📜test.dwg                                    --> another static file
+┃ ┗ ...
+┗ 📂tiles
+
+```
+
+### Get a list of all available static files 
+
+You can list all available static files by going to:
+
+```
+http://localhost:{port}/static
+```
+
+This will return a list of all available static files, served from this server as well as additional information, describing the parameters of the files:
+
+### Example Repsonse
+
+> **Available Static Files**
+>
+> This is a list of all static files, which are served from this service:
+>
+> - **cez.json** - download file
+>
+> | Property                  | Value                                                                                                                                                       |
+> | ------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | Content Type                  | application/json                                                                                                                                                           |
+> | Size                 | 6 KB
+
 ## Preview Tilesets
 
 All available tilesets can be previewed in a simple Map Viewer created with [Leaflet](https://leafletjs.com). Each type of tileset is accessible on different address:
@@ -187,6 +227,16 @@ http://localhost:{port}/preview/mbtiles?tileset={tileset}
 ```
 
 where `tileset` is the name of the MBTiles file containing the map tiles.
+
+## Static files
+
+Navigate to:
+
+```
+http://localhost:{port}/static?filename={file_name}
+```
+
+where `file_name` is the name of the static file to return.
 
 ## Examples
 

@@ -1,0 +1,17 @@
+<li>
+<span><b>{{name}}</b> - <a href='../static?filename={{name}}'>download file</a></span>
+<div class="rTable">
+  <div class="rTableRow">
+    <div class="rTableHead"><strong>Property</strong></div>
+    <div class="rTableHead"><strong>Value</strong></div>
+  </div>
+  <div class="rTableRow">
+    <div class="rTableCell">Content Type</div>
+    <div class="rTableCell">{{content_type}}</div>
+  </div>
+  <div class="rTableRow">
+    <div class="rTableCell">Size</div>
+    <div class="rTableCell">{{file_size}}</div>
+  </div>
+</div>
+</li>

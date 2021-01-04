@@ -12,6 +12,7 @@
       <w>quadkey</w>
       <w>rootpath</w>
       <w>serverport</w>
+      <w>staticfile</w>
       <w>tilesets</w>
     </words>
   </dictionary>

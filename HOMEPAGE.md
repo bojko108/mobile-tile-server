@@ -13,6 +13,8 @@ Mobile Tile Server is a local HTTP server, serving Map Tiles from the device sto
 
 ### [Get a list of all Tilesets in JSON format](/availabletilesets)
 
+### [Get a list of all static files](/static)
+
 # Info
 
 The map tiles must be stored in device storage and the app should have access to the raw files. In app settings you can change the root directory, where the tilesets are stored and also the server's listening port. When the server is running all tilesets from the root directory can be accessed using HTTP GET Requests.
@@ -51,6 +53,21 @@ MBTiles Tilesets are SQLite databases with known schema - [MBTiles](https://gith
 ┣ 📂mbtiles
 ┃ ┣ 📜glavatar-kaleto-M5000-zoom1_17.mbtiles      --> MBTiles Tileset
 ┃ ┣ 📜glavatar-kaleto-orthophoto-zoom1_18.mbtiles --> MBTiles Tileset
+┃ ┗ ...
+┗ 📂tiles
+
+```
+
+## Static files
+
+Returns a list of all static files served by this server. This is an example file structure of the root directory:
+
+```
+
+📦MobileTileServer                                --> server root directory
+┣ 📂static
+┃ ┣ 📜cez.json                                    --> static file
+┃ ┣ 📜test.dwg                                    --> another static file
 ┃ ┗ ...
 ┗ 📂tiles
 

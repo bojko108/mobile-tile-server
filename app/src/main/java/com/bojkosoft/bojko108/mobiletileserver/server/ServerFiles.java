@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.bojkosoft.bojko108.mobiletileserver.R;
+import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
 import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,6 +103,11 @@ public class ServerFiles {
     private static final String SERVICES = "{{services}}";
     /**
      * This value is stored in a template string and can be used
+     * to fill the content of the web page - list of available static files
+     */
+    private static final String STATIC_FILES = "{{static_files}}";
+    /**
+     * This value is stored in a template string and can be used
      * to fill the tileset name - MBTiles file name or Tile directory name
      */
     private static final String TILESET_NAME = "{{tileset_name}}";
@@ -111,6 +116,16 @@ public class ServerFiles {
      * to fill the name of the tileset - MBTiles file or Tile directory
      */
     private static final String NAME = "{{name}}";
+    /**
+     * This value is stored in a template string and can be used
+     * to fill the content type of the file
+     */
+    private static final String CONTENT_TYPE = "{{content_type}}";
+    /**
+     * This value is stored in a template string and can be used
+     * to fill the size of the file - in KB, MB...
+     */
+    private static final String FILE_SIZE = "{{file_size}}";
     /**
      * This value is stored in a template string and can be used
      * to fill the version of the MBTiles tileset - {@link TilesetInfo#VERSION}
@@ -145,6 +160,10 @@ public class ServerFiles {
      * This is the URL template for loading a directory tileset in a mapping application
      */
     private static final String TILES_URL = "%s/tiles/%s/{z}/{x}/{y}.png";
+    /**
+     * This is the URL template for downloading a static file
+     */
+    private static final String STATIC_FILE_URL = "%s/static?filename=%s";
 
     public static void setServerUrlAddress(String homeAddress) {
         SERVER_HOME_ADDRESS = homeAddress;
@@ -282,6 +301,10 @@ public class ServerFiles {
      */
     public static String getAvailableMBTilesPageHtmlFor(List<TilesetInfo> tilesets) {
         return ServerFiles.getPageForAvailableTilesets(tilesets, TilesetType.MBTiles);
+    }
+
+    public static String getAvailableStaticFilesPageHtmlFor(List<StaticFileInfo> staticFiles) {
+        return ServerFiles.getPageForAvailableStaticFiles(staticFiles);
     }
 
     /**
@@ -460,7 +483,44 @@ public class ServerFiles {
                     .replace(TITLE, title)
                     .replace(HEADER, title)
                     .replace(DETAILS, details)
-                    .replace(SERVICES, services.stream().collect(Collectors.joining()));
+                    .replace(SERVICES, String.join("", services));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    private static String getPageForAvailableStaticFiles(List<StaticFileInfo> staticFiles) {
+        try {
+            List<String> files = new ArrayList<>();
+            String result = ServerFiles.readToEnd(getRawResource(R.raw.staticfiles));
+            String itemTemplate = ServerFiles.readToEnd(ServerFiles.getRawResource(R.raw.staticfileinfo));
+            String templateUrl = STATIC_FILE_URL;
+            String title = APP_RESOURCES.getString(R.string.web_page_title_staticfiles);
+            String details = APP_RESOURCES.getString(R.string.web_page_details_staticfiles);
+
+            if (staticFiles != null) {
+                for (StaticFileInfo info : staticFiles) {
+                    String url = String.format(Locale.getDefault(),
+                            templateUrl,
+                            SERVER_HOME_ADDRESS,
+                            info.getFileName());
+                    String text = itemTemplate
+                            .replace(NAME, info.getFileName())
+                            .replace(CONTENT_TYPE, info.getContentType())
+                            .replace(FILE_SIZE, info.getSizeAsText())
+                            .replace(URL, url);
+
+                    files.add(text);
+                }
+            }
+
+            return result
+                    .replace(TITLE, title)
+                    .replace(HEADER, title)
+                    .replace(DETAILS, details)
+                    .replace(STATIC_FILES, String.join("", files));
         } catch (IOException e) {
             e.printStackTrace();
         }

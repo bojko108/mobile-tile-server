@@ -61,6 +61,8 @@
     <string name="web_page_details_mbtiles" translatable="false">This is a list of all MBTiles tilesets, served from this server:</string>
     <string name="web_page_title_tiles" translatable="false">Available Directory Tilesets</string>
     <string name="web_page_details_tiles" translatable="false">This is a list of all directories, containing tiles and are served from this service:</string>
+    <string name="web_page_title_staticfiles" translatable="false">Available Static Files</string>
+    <string name="web_page_details_staticfiles" translatable="false">This is a list of all static files, which are served from this service:</string>
     <string name="settings_open_settings_button" translatable="false">settings_open_settings_button</string>
     <string name="settings_open_settings_text"><![CDATA[Due to Android\'s power-saving features that extend battery life for users by managing how apps behave when a device is not connected to a power source, the application may became inactive while in background. To control that, you can enable manual settings for Mobile Tile Server App by going to Device Settings > Battery > App Launch:]]></string>
     <string name="settings_category_open_settings" translatable="false">settings_category_open_settings</string>
