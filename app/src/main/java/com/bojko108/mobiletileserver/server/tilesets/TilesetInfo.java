@@ -1,6 +1,6 @@
-package com.bojkosoft.bojko108.mobiletileserver.server.tilesets;
+package com.bojko108.mobiletileserver.server.tilesets;
 
-import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
+import com.bojko108.mobiletileserver.utils.HelperClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;

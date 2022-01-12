@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver.server.tilesets;
+package com.bojko108.mobiletileserver.server.tilesets;
 
 import java.util.Locale;
 

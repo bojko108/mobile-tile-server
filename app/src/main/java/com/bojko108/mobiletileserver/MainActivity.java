@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver;
+package com.bojko108.mobiletileserver;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,8 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bojkosoft.bojko108.mobiletileserver.server.TileService;
-import com.bojkosoft.bojko108.mobiletileserver.server.TileServiceReceiver;
+import com.bojko108.mobiletileserver.server.TileService;
+import com.bojko108.mobiletileserver.server.TileServiceReceiver;
 import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

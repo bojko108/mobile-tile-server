@@ -1,13 +1,13 @@
-package com.bojkosoft.bojko108.mobiletileserver.server;
+package com.bojko108.mobiletileserver.server;
 
 import android.content.Context;
 import android.os.FileUtils;
 import android.util.Log;
 
-import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.MBTilesDatabase;
-import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
-import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
-import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
+import com.bojko108.mobiletileserver.server.tilesets.MBTilesDatabase;
+import com.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
+import com.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
+import com.bojko108.mobiletileserver.utils.HelperClass;
 import com.koushikdutta.async.AsyncServer;
 import com.koushikdutta.async.http.Multimap;
 import com.koushikdutta.async.http.server.AsyncHttpServer;

@@ -1,7 +1,9 @@
-package com.bojkosoft.bojko108.mobiletileserver;
+package com.bojko108.mobiletileserver;
 
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.bojko108.mobiletileserver.BuildConfig;
 
 import androidx.appcompat.app.AppCompatActivity;
 

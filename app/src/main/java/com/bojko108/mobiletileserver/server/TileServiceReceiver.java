@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver.server;
+package com.bojko108.mobiletileserver.server;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

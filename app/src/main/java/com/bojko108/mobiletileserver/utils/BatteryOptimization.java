@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver.utils;
+package com.bojko108.mobiletileserver.utils;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,8 +11,6 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-
-// taken from https://gist.github.com/moopat/e9735fa8b5cff69d003353a4feadcdbc and edited
 
 /**
  * Get a dialog that informs the user to disable battery optimization for your app.

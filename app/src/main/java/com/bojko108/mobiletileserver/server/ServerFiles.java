@@ -1,11 +1,11 @@
-package com.bojkosoft.bojko108.mobiletileserver.server;
+package com.bojko108.mobiletileserver.server;
 
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.bojkosoft.bojko108.mobiletileserver.R;
-import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
-import com.bojkosoft.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
+import com.bojko108.mobiletileserver.R;
+import com.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
+import com.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

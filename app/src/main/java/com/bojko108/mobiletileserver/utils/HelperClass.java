@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver.utils;
+package com.bojko108.mobiletileserver.utils;
 
 import android.text.TextUtils;
 import android.util.Log;

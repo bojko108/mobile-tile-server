@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver.server;
+package com.bojko108.mobiletileserver.server;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,8 +14,8 @@ import android.graphics.drawable.Icon;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.bojkosoft.bojko108.mobiletileserver.MainActivity;
-import com.bojkosoft.bojko108.mobiletileserver.R;
+import com.bojko108.mobiletileserver.MainActivity;
+import com.bojko108.mobiletileserver.R;
 
 import androidx.annotation.Nullable;
 

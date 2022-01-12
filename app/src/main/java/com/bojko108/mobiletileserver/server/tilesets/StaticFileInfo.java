@@ -1,9 +1,9 @@
-package com.bojkosoft.bojko108.mobiletileserver.server.tilesets;
+package com.bojko108.mobiletileserver.server.tilesets;
 
 import android.text.format.Formatter;
 import android.webkit.MimeTypeMap;
 
-import com.bojkosoft.bojko108.mobiletileserver.utils.HelperClass;
+import com.bojko108.mobiletileserver.utils.HelperClass;
 
 import java.io.File;
 import java.util.Locale;

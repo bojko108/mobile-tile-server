@@ -1,7 +1,6 @@
-package com.bojkosoft.bojko108.mobiletileserver;
+package com.bojko108.mobiletileserver;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
@@ -13,7 +12,7 @@ import androidx.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.bojkosoft.bojko108.mobiletileserver.utils.BatteryOptimization;
+import com.bojko108.mobiletileserver.utils.BatteryOptimization;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 

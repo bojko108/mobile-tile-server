@@ -1,4 +1,4 @@
-package com.bojkosoft.bojko108.mobiletileserver;
+package com.bojko108.mobiletileserver;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,8 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.bojkosoft.bojko108.mobiletileserver.server.TileService;
-import com.bojkosoft.bojko108.mobiletileserver.server.TileServiceReceiver;
+import com.bojko108.mobiletileserver.server.TileService;
+import com.bojko108.mobiletileserver.server.TileServiceReceiver;
 
 public class ShortcutsActivity extends Activity {
 
