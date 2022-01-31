@@ -6,5 +6,6 @@
 .DS_Store
 /build
 app/release
+app/debug
 /captures
 .externalNativeBuild

@@ -10,8 +10,8 @@ android {
         applicationId "com.bojko108.mobiletileserver"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1
-        versionName "4.2"
+        versionCode 3
+        versionName "4.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

@@ -5,11 +5,13 @@
     <EditTextPreference
         app:defaultValue="@string/settings_server_port_default"
         app:key="@string/serverport"
+        app:useSimpleSummaryProvider="true"
         app:summary="@string/settings_server_port_details"
         app:title="@string/settings_server_port" />
     <EditTextPreference
         app:defaultValue="@string/settings_root_path_default"
         app:key="@string/rootpath"
+        app:useSimpleSummaryProvider="true"
         app:summary="@string/settings_root_path_details"
         app:title="@string/settings_root_path" />
 

@@ -8,8 +8,8 @@
         android:shortcutShortLabel="@string/server_action_stop_short">
         <intent
             android:action="mobiletileserver.ACTION_STOP"
-            android:targetClass="com.bojkosoft.bojko108.mobiletileserver.ShortcutsActivity"
-            android:targetPackage="com.bojkosoft.bojko108.mobiletileserver" />
+            android:targetClass="com.bojko108.mobiletileserver.ShortcutsActivity"
+            android:targetPackage="com.bojko108.mobiletileserver" />
     </shortcut>
     <shortcut
         android:enabled="true"
@@ -19,7 +19,7 @@
         android:shortcutShortLabel="@string/server_action_start_short">
         <intent
             android:action="mobiletileserver.ACTION_START"
-            android:targetClass="com.bojkosoft.bojko108.mobiletileserver.ShortcutsActivity"
-            android:targetPackage="com.bojkosoft.bojko108.mobiletileserver" />
+            android:targetClass="com.bojko108.mobiletileserver.ShortcutsActivity"
+            android:targetPackage="com.bojko108.mobiletileserver" />
     </shortcut>
 </shortcuts>
