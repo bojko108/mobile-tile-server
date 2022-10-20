@@ -1,9 +1,14 @@
 package com.bojko108.mobiletileserver.server;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.Environment;
 import android.os.FileUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
+import com.bojko108.mobiletileserver.R;
 import com.bojko108.mobiletileserver.server.tilesets.MBTilesDatabase;
 import com.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
 import com.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
@@ -41,6 +46,7 @@ import java.util.Locale;
  * Mobile Tile Server, Copyright (c) 2020 by bojko108
  * <p/>
  */
+@RequiresApi(api = Build.VERSION_CODES.R)
 class TileServer {
     private static final String TAG = TileServer.class.getName();
 
@@ -101,7 +107,6 @@ class TileServer {
 
     private AsyncServer server;
     private AsyncHttpServer httpServer;
-
     private String rootPath;
     private int port;
     private Context appContext;
@@ -256,6 +261,7 @@ class TileServer {
     private byte[] getTileFromMBTilesFile(Multimap parameters) {
         try {
             String mbtilesFilePath = this.getPathToMBTilesTileset(parameters.getString(PARAMETER_TILESET));
+            Log.v("xgt", mbtilesFilePath.toString());
             if (!mbtilesFilePath.endsWith(".mbtiles")) {
                 mbtilesFilePath += ".mbtiles";
             }
@@ -330,6 +336,7 @@ class TileServer {
      *
      * @return list of tileset info
      */
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private List<TilesetInfo> getInfoForAllMBTilesTilesets() {
         List<TilesetInfo> result = new ArrayList<>();
 
@@ -345,7 +352,6 @@ class TileServer {
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
-
         return result;
     }
 
@@ -529,7 +535,6 @@ class TileServer {
         int responseCode = 200;
         String responseData = "";
         byte[] responseDataArray = null;
-
         try {
             if (parameters.isEmpty()) {
                 // send a list of available MBTiles tilesets

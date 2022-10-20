@@ -2,10 +2,12 @@ package com.bojko108.mobiletileserver.server.tilesets;
 
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -66,12 +68,14 @@ public class MBTilesDatabase extends SQLiteOpenHelper {
         info.setParameter(TilesetInfo.TILESET_NAME, path[path.length - 1]);
 
         try (Cursor cur = db.rawQuery(GET_INFO_SQL_STRING, null)) {
-            cur.moveToFirst();
-            while (!cur.isAfterLast()) {
-                String name = cur.getString(cur.getColumnIndex("name"));
-                String value = cur.getString(cur.getColumnIndex("value"));
-                info.setParameter(name, value);
-                cur.moveToNext();
+            if (cur != null) {
+                cur.moveToFirst();
+                while (!cur.isAfterLast()) {
+                    String name = cur.getString(cur.getColumnIndex("name"));
+                    String value = cur.getString(cur.getColumnIndex("value"));
+                    info.setParameter(name, value);
+                    cur.moveToNext();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
