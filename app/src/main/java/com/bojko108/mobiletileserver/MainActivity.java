@@ -8,13 +8,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,14 +39,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int serverPort;
     private String rootPath;
     private boolean running;
+    int PERMISSION_REQUEST = 1;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,8 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      *
      * @param activity this activity
      */
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void checkPermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission1 = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
 
         if (PackageManager.PERMISSION_GRANTED != permission) {
             // ask user for permissions
@@ -179,6 +188,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     PERMISSIONS_STORAGE,
                     REQUEST_EXTERNAL_STORAGE
             );
+        }
+        if (Environment.isExternalStorageManager()) {
+            //todo when permission is granted
+        } else {
+            //request for the permission
+            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
         }
     }
 

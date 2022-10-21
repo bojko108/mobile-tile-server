@@ -37,7 +37,7 @@
     <string name="settings_server_port_default" translatable="false">1886</string>
     <string name="settings_root_path">Tiles root directory path</string>
     <string name="settings_root_path_details">Specify root directory path where the map tiles are stored</string>
-    <string name="settings_root_path_default" translatable="false">/storage/emulated/0/MobileTileServer</string>
+    <string name="settings_root_path_default" translatable="false">/storage/emulated/0/Download</string>
     <string name="settings_status">Tile server running</string>
     <string name="settings_reset_category">Restore default settings</string>
     <string name="settings_reset">Restore</string>
@@ -68,5 +68,5 @@
     <string name="settings_category_open_settings" translatable="false">settings_category_open_settings</string>
     <string name="settings_open_settings_title">Run in background</string>
     <string name="settings_open_settings_button_text">Open Settings</string>
-    <string name="settings_open_settings_info">settings_open_settings_info</string>
+    <string name="settings_open_settings_info" translatable="false">settings_open_settings_info</string>
 </resources>
