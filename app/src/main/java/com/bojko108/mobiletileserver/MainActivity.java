@@ -2,12 +2,17 @@ package com.bojko108.mobiletileserver;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +20,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bojko108.mobiletileserver.server.TileService;
 import com.bojko108.mobiletileserver.server.TileServiceReceiver;
@@ -170,16 +177,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param activity this activity
      */
     private void checkPermissions(Activity activity) {
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                //startActivity(new Intent(this, MainActivity.class));
+            } else {
+                //request for the permission
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("Action required")
+                    .setMessage("This application needs access to all files on this device. Access to all files located in the root directory (set in app settings) is needed. In the next dialog find Mobile Tile Server application and give it permission to manage all files.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getApplicationContext(),"Permission not given! The tile server will serve only static map tiles.",Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .show();
+            }
+        } else {
+            //below android 11
+            int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (PackageManager.PERMISSION_GRANTED != permission) {
-            // ask user for permissions
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
+            if (PackageManager.PERMISSION_GRANTED != permission) {
+                // ask user for permissions
+                ActivityCompat.requestPermissions(
+                        activity,
+                        PERMISSIONS_STORAGE,
+                        REQUEST_EXTERNAL_STORAGE
+                );
+            }
         }
+
     }
 
     /**

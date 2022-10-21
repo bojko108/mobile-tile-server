@@ -23,6 +23,17 @@ The map tiles must be stored in device storage and the app should have access to
 
 > ⚠️ The tile server is running in background and battery optimization functions in Android can cause it to become inactive after time. In order to be able to use it for a longer periods of time it is recommended to enable manual settings for **Mobile Tile Server** App in Device Settings > Battery > App Launch.
 
+## Default no-tile image
+
+Default no-tile image (image served when a map tile is not available) can be changed by puting a `no_tile.png` file in your root directory:
+
+```
+📦MobileTileServer      --> server root directory
+ ┣ 📂tiles
+ ┣ 📂mbtiles
+ ┗ 📜no_tile.png        --> default no-tile image to be used
+```
+
 ## Directory Tilesets
 
 Directory Tilesets are image files stored in directories. Each zoom level (`z` coordinate) is stored in a separate subdirectory and each tile column (`x` coordinate) is stored in additional subdirectory. This is an example file structure of the root directory:

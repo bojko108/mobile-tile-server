@@ -15,7 +15,7 @@
     <!-- Strings related to Help activity -->
     <string name="help_example">EXAMPLE</string>
     <string name="help_main">Mobile Tile Server (v%s) can be used as a HTTP server, serving Map Tiles from the device storage. When the server is running you can access the tiles from different mapping applications.</string>
-    <string name="help_options_header">The application provides four options:\n- Access of local Map Tiles\n- Access of local MBTiles files\n- Redirect to a Tile Server with QuadKey Tile schema\n- Access static files</string>
+    <string name="help_options_header">The application provides four options:\n- Access of local Map Tiles\n- Access of local MBTiles files\n- Redirect to a Tile Server with QuadKey Tile schema\n- Access static files\n\nTo change the default tile image put a \'no_tile.png\' file in \nthe root directory of the server.</string>
     <string name="help_options_1_header">Access to local Map Tiles</string>
     <string name="help_options_1_1">Local Map Tiles can be accessed on address:</string>
     <string name="help_options_1_2">Where PORT is set in application settings. In settings, you must specify a directory, where the files are stored. This directory is used as a root for the server. All files in that directory (including subdirectories) will be accessible from the server.</string>
