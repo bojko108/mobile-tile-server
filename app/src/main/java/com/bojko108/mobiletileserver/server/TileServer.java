@@ -114,7 +114,7 @@ class TileServer {
      * @param context  application context - for accessing resource files and strings
      */
     TileServer(String rootPath, Context context) {
-        ServerFiles.setAppResources(context);
+        ServerFiles.setAppResources(context, rootPath);
 
         this.appContext = context;
         this.rootPath = rootPath;
