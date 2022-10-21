@@ -6,9 +6,13 @@ import android.content.res.Resources;
 import com.bojko108.mobiletileserver.R;
 import com.bojko108.mobiletileserver.server.tilesets.StaticFileInfo;
 import com.bojko108.mobiletileserver.server.tilesets.TilesetInfo;
+import com.bojko108.mobiletileserver.utils.HelperClass;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -191,15 +195,16 @@ public class ServerFiles {
      * Us this to set the application context, used for accessing resource files
      * and strings.
      *
-     * @param context application context - use {@link Context#getApplicationContext()}
+     * @param context  application context - use {@link Context#getApplicationContext()}
+     * @param rootPath sets the root directory for the server, where all map tiles are located
      */
-    public static void setAppResources(Context context) {
+    public static void setAppResources(Context context, String rootPath) {
         ServerFiles.APP_RESOURCES = context.getResources();
 
         /*
          * Read this from resource files
          */
-        ServerFiles.NO_TILE_IMAGE = ServerFiles.getNoTileFile();
+        ServerFiles.NO_TILE_IMAGE = ServerFiles.getNoTileFile(rootPath);
     }
 
     public static String getHomePageHtml() {
@@ -531,10 +536,19 @@ public class ServerFiles {
     /**
      * Get no data tile - this image is returned when a tile isn't found by the server
      *
+     * @param rootPath sets the root directory for the server, where all map tiles are located
      * @return Image
      */
-    private static byte[] getNoTileFile() {
+    private static byte[] getNoTileFile(String rootPath) {
         InputStream stream = APP_RESOURCES.openRawResource(R.raw.no_tile);
+        File customNoTileImageFile = HelperClass.getFileFromPath(rootPath + "/no_tile.png");
+        if (customNoTileImageFile != null) {
+            try {
+                stream = new FileInputStream(customNoTileImageFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
