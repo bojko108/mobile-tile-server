@@ -42,6 +42,17 @@ The map tiles must be stored in device storage and the app should have access to
 - `http://localhost:{port}/static` - returns all available static files for download
 - `http://localhost:{port}/static?filename={file_name}` - gets the specified static file
 
+## Default no-tile image
+
+Default no-tile image (image served when a map tile is not available) can be changed by puting a `no_tile.png` file in your root directory:
+
+```
+📦MobileTileServer      --> server root directory
+ ┣ 📂tiles
+ ┣ 📂mbtiles
+ ┗ 📜no_tile.png        --> default no-tile image to be used
+```
+
 ## Directory Tilesets
 
 Directory Tilesets are image files stored in directories. Each zoom level (`z` coordinate) is stored in a separate subdirectory and each tile column (`x` coordinate) is stored in additional subdirectory. This is an example file structure of the root directory:
