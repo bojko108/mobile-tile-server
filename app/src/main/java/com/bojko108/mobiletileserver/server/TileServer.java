@@ -529,6 +529,7 @@ class TileServer {
         int responseCode = 200;
         String responseData = "";
         byte[] responseDataArray = null;
+        String contentType = null;
 
         try {
             if (parameters.isEmpty()) {
@@ -537,6 +538,11 @@ class TileServer {
                 responseData = ServerFiles.getAvailableMBTilesPageHtmlFor(tilesets);
             } else {
                 responseDataArray = returnTile(getTileFromMBTilesFile(parameters));
+
+                // read content type for this tileset
+                String tilesetName = parameters.getString(PARAMETER_TILESET);
+                TilesetInfo tilesetInfo = getMBTilesInfoFor(tilesetName);
+                contentType = tilesetInfo != null ? tilesetInfo.getContentType() : "image/png";
             }
         } catch (Exception ex) {
             responseCode = 500;
@@ -549,7 +555,7 @@ class TileServer {
             response.send(ServerFiles.getInternalServerErrorPage(responseData));
         } else {
             if (responseDataArray != null) {
-                response.send("image/png", responseDataArray);
+                response.send(contentType, responseDataArray);
             } else {
                 response.send(responseData);
             }

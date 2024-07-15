@@ -142,6 +142,11 @@ public class ServerFiles {
     private static final String DESCRIPTION = "{{description}}";
     /**
      * This value is stored in a template string and can be used
+     * to fill the format of the MBTiles tileset - {@link TilesetInfo#FORMAT}
+     */
+    private static final String FORMAT = "{{format}}";
+    /**
+     * This value is stored in a template string and can be used
      * to fill the bounds of the MBTiles tileset - {@link TilesetInfo#BOUNDS}
      */
     private static final String BOUNDS = "{{bounds}}";
@@ -295,6 +300,7 @@ public class ServerFiles {
      * <li>{@link ServerFiles#NAME}</li>
      * <li>{@link ServerFiles#VERSION}</li>
      * <li>{@link ServerFiles#DESCRIPTION}</li>
+     * <li>{@link ServerFiles#FORMAT}</li>
      * <li>{@link ServerFiles#MIN_ZOOM}</li>
      * <li>{@link ServerFiles#MAX_ZOOM}</li>
      * <li>{@link ServerFiles#BOUNDS}</li>
@@ -473,6 +479,7 @@ public class ServerFiles {
                             .replace(NAME, info.getParameter(TilesetInfo.NAME, String.class))
                             .replace(VERSION, info.getParameter(TilesetInfo.VERSION, String.class))
                             .replace(DESCRIPTION, info.getParameter(TilesetInfo.DESCRIPTION, String.class))
+                            .replace(FORMAT, info.getParameter(TilesetInfo.FORMAT, String.class))
                             .replace(MIN_ZOOM, String.valueOf(info.getParameter(TilesetInfo.MIN_ZOOM, Integer.class)))
                             .replace(MAX_ZOOM, String.valueOf(info.getParameter(TilesetInfo.MAX_ZOOM, Integer.class)))
                             .replace(BOUNDS, bounds)

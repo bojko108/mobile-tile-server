@@ -18,6 +18,10 @@
             <div class="rTableCell">{{description}}</div>
         </div>
         <div class="rTableRow">
+            <div class="rTableCell">Format</div>
+            <div class="rTableCell">{{format}}</div>
+        </div>
+        <div class="rTableRow">
             <div class="rTableCell">Min Zoom</div>
             <div class="rTableCell">{{min_zoom}}</div>
         </div>

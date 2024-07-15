@@ -16,6 +16,7 @@ import java.io.File;
  * for tiles directory it gives the name of the directory</li>
  * <li><b>DESCRIPTION</b> - tileset description</li>
  * <li><b>VERSION</b> - tileset version: <i>1.1, 1.2, 1.3...</i></li>
+ * <li><b>FORMAT</b> - tileset type: <i>PNG, PBF...</i></li>
  * <li><b>MIN_ZOOM</b> - the lowest zoom level for which the tileset provides data</li>
  * <li><b>MAX_ZOOM</b> - the highest zoom level for which the tileset provides data</li>
  * <li><b>BOUNDS</b> - tileset extent in geographic coordinates</li>
@@ -43,6 +44,10 @@ public class TilesetInfo {
      */
     public static final String VERSION = "version";
     /**
+     * Use this key to get/set tileset type parameter from MBTiles Database: <i>png, pbf...</i>
+     */
+    public static final String FORMAT = "format";
+    /**
      * Use this key to get/set tileset min zoom parameter
      * Specifies the lowest zoom level for which the tileset provides data.
      */
@@ -63,6 +68,7 @@ public class TilesetInfo {
     private String tilesetName = "";
     private String name = "";
     private String description = "";
+    private String format = "png";
     private String version = "";
     private int minZoom = 999;
     private int maxZoom = -1;
@@ -114,6 +120,8 @@ public class TilesetInfo {
                 return type.cast(this.name);
             case DESCRIPTION:
                 return type.cast(this.description);
+            case FORMAT:
+                return type.cast((this.format));
             case VERSION:
                 return type.cast(this.version);
             case MIN_ZOOM:
@@ -144,6 +152,9 @@ public class TilesetInfo {
                 break;
             case DESCRIPTION:
                 this.description = value;
+                break;
+            case FORMAT:
+                this.format = value;
                 break;
             case VERSION:
                 this.version = value;
@@ -178,6 +189,25 @@ public class TilesetInfo {
     public String getBoundsAsString() {
         return HelperClass.arrayToString(this.getBounds(), ",");
     }
+    /**
+     * Gets the tileset format as content type text
+     *
+     * @return content type: e.g. "image/png"
+     */
+    public String getContentType() {
+        switch (this.format.toLowerCase()) {
+            case "jpg":
+                return "image/jpg";
+            case "jpeg":
+                return "image/jpeg";
+            case "bmp":
+                return "image/bmp";
+            case "pbf":
+                return "application/octet-stream";
+            default: // png
+                return "image/png";
+        }
+    }
 
     /**
      * Use this to get tileset center coordinates
@@ -208,6 +238,7 @@ public class TilesetInfo {
             result.put(TILESET_NAME, this.tilesetName);
             result.put(NAME, this.name);
             result.put(DESCRIPTION, this.description);
+            result.put(FORMAT, this.format);
             result.put(VERSION, this.version);
             result.put(MIN_ZOOM, this.minZoom);
             result.put(MAX_ZOOM, this.maxZoom);
