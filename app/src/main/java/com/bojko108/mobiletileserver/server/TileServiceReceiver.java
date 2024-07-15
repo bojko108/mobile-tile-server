@@ -93,6 +93,6 @@ public class TileServiceReceiver extends BroadcastReceiver {
      * @param context context to be used for broadcasting <b>Intent.ACTION_CLOSE_SYSTEM_DIALOGS</b> message
      */
     private void closeNotificationBar(Context context) {
-        context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        //context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
 }

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -154,21 +155,22 @@ public class TileService extends Service {
         Intent openIntent = new Intent(this, MainActivity.class);
         openIntent.setAction(Intent.ACTION_MAIN);
         openIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
         PendingIntent pendingIntentNotification = PendingIntent
-                .getActivity(this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                .getActivity(this, 0, openIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action stopAction = this.createAction(
-                TileServiceReceiver.ACTION_STOP, getResources().getString(R.string.server_action_stop_short), null, 0);
+                TileServiceReceiver.ACTION_STOP, getResources().getString(R.string.server_action_stop_short), null, PendingIntent.FLAG_IMMUTABLE);
 
         List<String[]> extras = new ArrayList<>();
         extras.add(new String[]{KEY_ROOT_PATH, this.server.getRootDirectoryPath()});
         Notification.Action browseRootAction = this.createAction(
-                TileServiceReceiver.ACTION_OPEN_ROOT_PATH, getResources().getString(R.string.server_action_browse_short), extras, 0);
+                TileServiceReceiver.ACTION_OPEN_ROOT_PATH, getResources().getString(R.string.server_action_browse_short), extras, PendingIntent.FLAG_IMMUTABLE);
 
         extras.clear();
         extras.add(new String[]{KEY_SERVER_PATH, this.server.getHomeAddress()});
         Notification.Action navigateAction = this.createAction(
-                TileServiceReceiver.ACTION_NAVIGATE_TO_SERVER, getResources().getString(R.string.server_action_navigate_short), extras, PendingIntent.FLAG_UPDATE_CURRENT);
+                TileServiceReceiver.ACTION_NAVIGATE_TO_SERVER, getResources().getString(R.string.server_action_navigate_short), extras, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Builder builder = new Notification.Builder(this, this.notificationChannel.getId())
                 .setOngoing(true)
