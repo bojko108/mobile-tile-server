@@ -164,7 +164,7 @@ public class ServerFiles {
     /**
      * This is the URL template for loading a MBTiles tileset in a mapping application
      */
-    private static final String MBTILES_URL = "%s/mbtiles?tileset=%s&z={z}&x={x}&y={y}";
+    private static final String MBTILES_URL = "%s/mbtiles/%s/{z}/{x}/{y}";
     /**
      * This is the URL template for loading a directory tileset in a mapping application
      */
