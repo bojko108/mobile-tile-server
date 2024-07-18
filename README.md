@@ -1,5 +1,9 @@
 # Mobile Tile Server
 
+| IzzyOnDroid F-Droid | Play Store             |
+|:-------------------:|:-------------------:|
+| <a href="https://apt.izzysoft.de/fdroid/index/apk/com.bojko108.mobiletileserver"><img alt='F-Droid' height='60' width='155' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png' /></a> | <a href='https://play.google.com/store/apps/details?id=com.bojko108.mobiletileserver'><img alt='Get it on Google Play' height='60' width='155' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a> |
+
 Mobile Tile Server is a local HTTP server, serving Map Tiles from the device storage. When the server is running you can access the map tiles from different mapping applications. The application provides access to two types of tilesets:
 
 - Map Tiles stored in directories - [Slippy Maps](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames)

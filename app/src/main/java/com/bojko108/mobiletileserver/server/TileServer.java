@@ -155,7 +155,7 @@ class TileServer {
             this.httpServer.get(URL_HOME_PAGE, this.homePageCallback);
             this.httpServer.get(URL_PREVIEW_MBTILES, this.previewMBTilesPageCallback);
             this.httpServer.get(URL_PREVIEW_TILES, this.previewTilesPageCallback);
-            this.httpServer.get(URL_MBTILES, this.getMBTileCallback);
+            this.httpServer.get(URL_MBTILES + ".*", this.getMBTileCallback);
             this.httpServer.get(URL_TILES, this.getAvailableDirectoryTiles);
             this.httpServer.get(URL_TILES + ".*", this.getTileCallback);
             this.httpServer.get(URL_AVAILABLE_TILESETS, this.getAvailableTilesetsAsJson);
@@ -255,7 +255,30 @@ class TileServer {
      */
     private byte[] getTileFromMBTilesFile(Multimap parameters) {
         try {
-            String mbtilesFilePath = this.getPathToMBTilesTileset(parameters.getString(PARAMETER_TILESET));
+            String tileset = parameters.getString(PARAMETER_TILESET);
+            String z_req = parameters.getString(PARAMETER_Z);
+            String x_req = parameters.getString(PARAMETER_X);
+            String y_req = parameters.getString(PARAMETER_Y);
+
+            return getTileFromMBTilesFile(tileset, z_req, x_req, y_req);
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Queries a MBTiles file for a specific Map Tile and returns it. MBTiles by default use TMS for the tiles.
+     * If your mapping application uses TMS, set {@link TileServer#PARAMETER_Y} parameters as negative.
+     *
+     * @param tileset - specifies the name of the MBTiles file to query data from (relative to the server's root directory)
+     * @param z_req   - specifies the zoom level
+     * @param x_req   - specifies tile's x coordinate
+     * @param y_req   - specifies tile's y coordinate. Use negative value if TMS schema is used by your mapping application
+     * @return Image
+     */
+    private byte[] getTileFromMBTilesFile(String tileset, String z_req, String x_req, String y_req) {
+        try {
+            String mbtilesFilePath = this.getPathToMBTilesTileset(tileset);
             if (!mbtilesFilePath.endsWith(".mbtiles")) {
                 mbtilesFilePath += ".mbtiles";
             }
@@ -266,9 +289,9 @@ class TileServer {
                 return null;
             }
 
-            int z = Integer.parseInt(parameters.getString(PARAMETER_Z));
-            int x = Integer.parseInt(parameters.getString(PARAMETER_X));
-            int y = Integer.parseInt(parameters.getString(PARAMETER_Y));
+            int z = Integer.parseInt(z_req);
+            int x = Integer.parseInt(x_req);
+            int y = Integer.parseInt(y_req);
 
             if (this.mbTilesDatabase == null) {
                 this.mbTilesDatabase = new MBTilesDatabase(appContext, mbtilesFilePath);
@@ -525,24 +548,35 @@ class TileServer {
      * @see <a href="http://192.168.100.7:1886/mbtiles?tileset=glavatar-kaleto-M5000-zoom1_17.mbtiles&z=14&x=9323&y=6061">Get an example of MBTiles Tile</a>
      */
     private final HttpServerRequestCallback getMBTileCallback = (request, response) -> {
-        Multimap parameters = request.getQuery();
+        String reqpath = request.getPath();
+        String[] reqparams = reqpath.split("/");
+
         int responseCode = 200;
         String responseData = "";
         byte[] responseDataArray = null;
         String contentType = null;
 
         try {
-            if (parameters.isEmpty()) {
+            if (reqparams.length != 6) {
                 // send a list of available MBTiles tilesets
                 List<TilesetInfo> tilesets = getInfoForAllMBTilesTilesets();
                 responseData = ServerFiles.getAvailableMBTilesPageHtmlFor(tilesets);
             } else {
-                responseDataArray = returnTile(getTileFromMBTilesFile(parameters));
+                String tilesetName = reqparams[2];
+                String z_req = reqparams[3];
+                String x_req = reqparams[4];
+                String y_req = reqparams[5];
 
-                // read content type for this tileset
-                String tilesetName = parameters.getString(PARAMETER_TILESET);
+                responseDataArray = returnTile(getTileFromMBTilesFile(tilesetName, z_req, x_req, y_req));
+
+                // read and set content type and encoding for this tileset
                 TilesetInfo tilesetInfo = getMBTilesInfoFor(tilesetName);
                 contentType = tilesetInfo != null ? tilesetInfo.getContentType() : "image/png";
+                if (tilesetInfo != null) {
+                    String format = tilesetInfo.getParameter(TilesetInfo.FORMAT, String.class);
+                    if (format != null && format.equals("pbf"))
+                        response.getHeaders().set("Content-Encoding", "gzip");
+                }
             }
         } catch (Exception ex) {
             responseCode = 500;
