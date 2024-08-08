@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    compileSdkVersion 33
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.bojko108.mobiletileserver"
         minSdkVersion 26
-        targetSdkVersion 33
-        versionCode 7
-        versionName "4.6"
+        targetSdkVersion 34
+        versionCode 8
+        versionName "5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -35,6 +35,7 @@ android {
             }
         }
     }
+    namespace 'com.bojko108.mobiletileserver'
 }
 
 dependencies {
@@ -49,5 +50,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+//    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 }
