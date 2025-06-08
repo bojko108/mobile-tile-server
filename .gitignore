@@ -9,3 +9,4 @@ app/release
 app/debug
 /captures
 .externalNativeBuild
+SIGN_APK.md
